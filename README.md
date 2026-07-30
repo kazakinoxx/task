@@ -9,3 +9,5 @@ pip install -r src2/requirements.txt
 
 ## 3. Run the experiment
 python -m frontend.main --participant P01
+
+settings can be changed on settings.json in src2/
