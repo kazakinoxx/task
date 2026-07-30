@@ -1,0 +1,109 @@
+{
+  "settings": {
+    "generalSettings": {
+      "fontSize": "normal",
+      "useDevice": true,
+      "skipAgencyTask": false,
+      "skipEBDMTask": false,
+      "useNarration": true,
+      "taskOrder": "EBDMFirst"
+    },
+    "languageSettings": {
+      "language": "en"
+    },
+    "practiceSettings": {
+      "numberOfPracticeLoops": 0
+    },
+    "calibrationSettings": {
+      "requiredTrialsCalibration": {
+        "calibrationPart1": 1,
+        "calibrationPart2": 3,
+        "finalCalibrationPart1": 1,
+        "finalCalibrationPart2": 3
+      },
+      "minimumCalibrationMedianTaps": 10
+    },
+    "agencyTaskSettings": {
+      "numberOfPracticeTrials": 1,
+      "breakFrequency": 10,
+      "numberOfTrials": 40,
+      "allowBreakSkip": true,
+      "breakDuration": 30000
+    },
+    "validationSettings": {
+      "numberOfValidationsPerType": 1,
+      "percentageOfValidationSuccessesRequired": 75,
+      "percentageOfExtraValidationSuccessesRequired": 50
+    },
+    "taskSettings": {
+      "taskBlockRepetitions": 1,
+      "taskPermutationRepetitions": 1,
+      "taskBlocksIncluded": [
+        "sync",
+        "shortasync",
+        "midasync",
+        "longasync"
+      ],
+      "taskBoundsIncluded": [
+        "easy",
+        "hard"
+      ],
+      "taskRewardsIncluded": [
+        "low",
+        "high"
+      ],
+      "randomSkipChance": 0,
+      "taskSequencingMode": "pseudorandom",
+      "taskCustomSequence": []
+    },
+    "photoDiodeSettings": {
+      "usePhotoDiode": "off",
+      "photoDiodeLeft": null,
+      "photoDiodeTop": null,
+      "photoDiodeHeight": null,
+      "photoDiodeWidth": null,
+      "testPhotoDiode": null
+    },
+    "keySettings": {
+      "leftIndex": "s",
+      "rightIndex": "l",
+      "leftPink": null,
+      "leftRing": null,
+      "leftMiddle": null,
+      "leftThumb": null
+    },
+    "nextStepSettings": {
+      "linkToNextPage": false,
+      "title": "",
+      "description": "",
+      "link": "",
+      "linkText": ""
+    }
+  },
+  "rawData": {
+    "trials": [
+      {
+        "task": "experiment_begin",
+        "trial_type": "fullscreen"
+      },
+      {
+        "task": "sit_comfortably",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "tutorial_introduction",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "preferred_hand",
+        "response": 1,
+        "preferredHand": "right",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "hold_key_instructions",
+        "trial_type": "html-button-response"
+      }
+    ]
+  }
+}

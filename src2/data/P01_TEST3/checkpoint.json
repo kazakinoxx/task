@@ -1,0 +1,76 @@
+{
+  "trials": [
+    {
+      "task": "experiment_begin",
+      "trial_type": "fullscreen"
+    },
+    {
+      "task": "sit_comfortably",
+      "trial_type": "html-button-response"
+    },
+    {
+      "task": "tutorial_introduction",
+      "trial_type": "html-button-response"
+    },
+    {
+      "task": "preferred_hand",
+      "response": 1,
+      "preferredHand": "right",
+      "trial_type": "html-button-response"
+    },
+    {
+      "task": "hold_key_instructions",
+      "trial_type": "html-button-response"
+    },
+    {
+      "task": "hold-key-practice",
+      "success": true,
+      "trial_type": "hold-key-practice"
+    },
+    {
+      "task": "hold-key-practice",
+      "success": true,
+      "trial_type": "hold-key-practice"
+    },
+    {
+      "task": "hold_key_practice_complete",
+      "trial_type": "html-button-response"
+    },
+    {
+      "task": "tapping_instructions",
+      "trial_type": "html-button-response"
+    },
+    {
+      "task": "countdown",
+      "keyTappedEarlyFlag": false,
+      "trial_type": "countdown-trial"
+    },
+    {
+      "tapCount": 0,
+      "startTime": 130893.60779999697,
+      "endTime": 132056.95469999773,
+      "mercuryHeight": 0,
+      "error": "",
+      "bounds": [
+        20,
+        40
+      ],
+      "reward": 0,
+      "task": "practice",
+      "errorOccurred": true,
+      "keysReleasedFlag": true,
+      "success": false,
+      "keyTappedEarlyFlag": false,
+      "keysState": {
+        "s": false
+      },
+      "medianTaps": 20.0,
+      "trial_type": "task-plugin"
+    },
+    {
+      "task": "success",
+      "success": false,
+      "trial_type": "success-screen-plugin"
+    }
+  ]
+}

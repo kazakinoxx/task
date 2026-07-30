@@ -1,0 +1,505 @@
+{
+  "settings": {
+    "generalSettings": {
+      "fontSize": "normal",
+      "useDevice": false,
+      "skipAgencyTask": false,
+      "skipEBDMTask": false,
+      "useNarration": true,
+      "taskOrder": "EBDMFirst"
+    },
+    "languageSettings": {
+      "language": "en"
+    },
+    "practiceSettings": {
+      "numberOfPracticeLoops": 0
+    },
+    "calibrationSettings": {
+      "requiredTrialsCalibration": {
+        "calibrationPart1": 1,
+        "calibrationPart2": 3,
+        "finalCalibrationPart1": 1,
+        "finalCalibrationPart2": 3
+      },
+      "minimumCalibrationMedianTaps": 10
+    },
+    "agencyTaskSettings": {
+      "numberOfPracticeTrials": 1,
+      "breakFrequency": 10,
+      "numberOfTrials": 40,
+      "allowBreakSkip": true,
+      "breakDuration": 30000
+    },
+    "validationSettings": {
+      "numberOfValidationsPerType": 1,
+      "percentageOfValidationSuccessesRequired": 75,
+      "percentageOfExtraValidationSuccessesRequired": 50
+    },
+    "taskSettings": {
+      "taskBlockRepetitions": 1,
+      "taskPermutationRepetitions": 1,
+      "taskBlocksIncluded": [
+        "sync",
+        "shortasync",
+        "midasync",
+        "longasync"
+      ],
+      "taskBoundsIncluded": [
+        "easy",
+        "hard"
+      ],
+      "taskRewardsIncluded": [
+        "low",
+        "high"
+      ],
+      "randomSkipChance": 0,
+      "taskSequencingMode": "pseudorandom",
+      "taskCustomSequence": []
+    },
+    "photoDiodeSettings": {
+      "usePhotoDiode": "off",
+      "photoDiodeLeft": null,
+      "photoDiodeTop": null,
+      "photoDiodeHeight": null,
+      "photoDiodeWidth": null,
+      "testPhotoDiode": null
+    },
+    "keySettings": {
+      "leftIndex": "s",
+      "rightIndex": "l",
+      "leftPink": null,
+      "leftRing": null,
+      "leftMiddle": null,
+      "leftThumb": null
+    },
+    "nextStepSettings": {
+      "linkToNextPage": false,
+      "title": "",
+      "description": "",
+      "link": "",
+      "linkText": ""
+    }
+  },
+  "rawData": {
+    "trials": [
+      {
+        "task": "experiment_begin",
+        "trial_type": "fullscreen"
+      },
+      {
+        "task": "sit_comfortably",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "tutorial_introduction",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "preferred_hand",
+        "response": 1,
+        "preferredHand": "right",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "hold_key_instructions",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "hold-key-practice",
+        "success": true,
+        "trial_type": "hold-key-practice"
+      },
+      {
+        "task": "hold-key-practice",
+        "success": true,
+        "trial_type": "hold-key-practice"
+      },
+      {
+        "task": "hold_key_practice_complete",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "tapping_instructions",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 12,
+        "startTime": 132032.13310000137,
+        "endTime": 137036.18060000008,
+        "mercuryHeight": 34,
+        "error": "",
+        "bounds": [
+          20,
+          40
+        ],
+        "reward": 0,
+        "task": "practice",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": true,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 20.0,
+        "trial_type": "task-plugin"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 3,
+        "startTime": 146036.8332000071,
+        "endTime": 151042.68969999976,
+        "mercuryHeight": 0,
+        "error": "",
+        "bounds": [
+          20,
+          40
+        ],
+        "reward": 0,
+        "task": "practice",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": false,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": false
+        },
+        "medianTaps": 20.0,
+        "trial_type": "task-plugin"
+      },
+      {
+        "task": "success",
+        "success": false,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 12,
+        "startTime": 163976.95640000165,
+        "endTime": 168979.34140000143,
+        "mercuryHeight": 30,
+        "error": "",
+        "bounds": [
+          20,
+          40
+        ],
+        "reward": 0,
+        "task": "practice",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": true,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 20.0,
+        "trial_type": "task-plugin"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "tapping_practice_complete",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "calibration_instructions",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 21,
+        "startTime": 185454.22390000022,
+        "endTime": 190457.3950000049,
+        "mercuryHeight": 69.5,
+        "error": "",
+        "bounds": [
+          50,
+          50
+        ],
+        "reward": 0,
+        "task": "calibrationPart2",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": false,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 26.666666666666668,
+        "trial_type": "task-plugin"
+      },
+      {
+        "errorOccurred": false,
+        "trial_type": "release-keys"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 26,
+        "startTime": 198897.12350000627,
+        "endTime": 203901.85560000828,
+        "mercuryHeight": 94,
+        "error": "",
+        "bounds": [
+          50,
+          50
+        ],
+        "reward": 0,
+        "task": "calibrationPart2",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": false,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 28.0,
+        "trial_type": "task-plugin"
+      },
+      {
+        "errorOccurred": false,
+        "trial_type": "release-keys"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": true,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 0,
+        "startTime": 0.0,
+        "endTime": 212634.94490001176,
+        "mercuryHeight": 0.0,
+        "error": "",
+        "bounds": [
+          50,
+          50
+        ],
+        "reward": 0,
+        "task": "calibrationPart2",
+        "errorOccurred": true,
+        "keysReleasedFlag": false,
+        "success": false,
+        "keyTappedEarlyFlag": true,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 34.666666666666664,
+        "trial_type": "task-plugin"
+      },
+      {
+        "errorOccurred": false,
+        "trial_type": "release-keys"
+      },
+      {
+        "task": "success",
+        "success": false,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 20,
+        "startTime": 226554.96920000587,
+        "endTime": 231561.42700000782,
+        "mercuryHeight": 35.38461538461538,
+        "error": "",
+        "bounds": [
+          50,
+          50
+        ],
+        "reward": 0,
+        "task": "calibrationPart2",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": false,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 34.666666666666664,
+        "trial_type": "task-plugin"
+      },
+      {
+        "errorOccurred": false,
+        "trial_type": "release-keys"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "validation_video_tutorial",
+        "trial_type": "html-button-response"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 2,
+        "startTime": 276813.6223000038,
+        "endTime": 281818.2850000012,
+        "mercuryHeight": 9.384615384615385,
+        "error": "",
+        "bounds": [
+          5,
+          35
+        ],
+        "reward": 0,
+        "task": "validationEasy",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": true,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 26.0,
+        "trial_type": "task-plugin"
+      },
+      {
+        "errorOccurred": false,
+        "trial_type": "release-keys"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 18,
+        "startTime": 291765.5659000011,
+        "endTime": 296766.2483000022,
+        "mercuryHeight": 44.461538461538474,
+        "error": "",
+        "bounds": [
+          35,
+          65
+        ],
+        "reward": 0,
+        "task": "validationMedium",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": true,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 26.0,
+        "trial_type": "task-plugin"
+      },
+      {
+        "errorOccurred": false,
+        "trial_type": "release-keys"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "task": "countdown",
+        "keyTappedEarlyFlag": false,
+        "trial_type": "countdown-trial"
+      },
+      {
+        "tapCount": 22,
+        "startTime": 305625.6921000022,
+        "endTime": 310627.4157000007,
+        "mercuryHeight": 77.23076923076924,
+        "error": "",
+        "bounds": [
+          65,
+          95
+        ],
+        "reward": 0,
+        "task": "validationHard",
+        "errorOccurred": false,
+        "keysReleasedFlag": false,
+        "success": true,
+        "keyTappedEarlyFlag": false,
+        "keysState": {
+          "s": true
+        },
+        "medianTaps": 26.0,
+        "trial_type": "task-plugin"
+      },
+      {
+        "errorOccurred": false,
+        "trial_type": "release-keys"
+      },
+      {
+        "task": "success",
+        "success": true,
+        "trial_type": "success-screen-plugin"
+      },
+      {
+        "response": {
+          "QUESTION_1": 5,
+          "QUESTION_2": 3,
+          "QUESTION_3": 5,
+          "QUESTION_4": 5,
+          "QUESTION_5": 5
+        },
+        "trial_type": "survey-likert",
+        "additional": true,
+        "validation": true
+      },
+      {
+        "task": "validation_result",
+        "trial_type": "html-button-response",
+        "passed": true,
+        "should_finish_early": false
+      }
+    ]
+  }
+}

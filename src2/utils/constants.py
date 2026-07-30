@@ -1,0 +1,124 @@
+"""Numeric/logic constants.
+
+Line-by-line port of the numeric constants in
+src/modules/experiment/utils/constants.ts. Timing values are kept in the
+same units as the original (milliseconds unless noted), converted to
+seconds only at the point of use in PsychoPy clocks (which are
+second-based) -- see trials/* for that conversion.
+
+Text-builder functions from constants.ts (TAP_ON_GO_INSTRUCTION,
+KEY_INSTRUCTIONS, etc.) are ported separately in i18n/stimulus_text.py
+(milestone 9), since they are presentation, not experiment logic.
+"""
+
+from __future__ import annotations
+
+from src2.utils.types import BoundsType, DelayType, RewardType
+
+LOADING_BAR_SPEED_NO = 50
+LOADING_BAR_SPEED_YES = 5
+
+AUTO_DECREASE_AMOUNT = 2
+AUTO_DECREASE_RATE = 100  # ms
+AUTO_INCREASE_AMOUNT = 10
+MAXIMUM_THERMOMETER_HEIGHT = 100
+EXPECTED_MAXIMUM_PERCENTAGE = 100
+NUM_TAPS_WITHOUT_DELAY = 5
+NUM_TAPS_AGENCY_WITHOUT_DELAY = 1
+
+DELAY_DEFINITIONS: dict[DelayType, tuple[int, int]] = {
+    DelayType.SYNC: (0, 0),
+    DelayType.SHORT_ASYNC: (0, 500),
+    DelayType.MID_ASYNC: (0, 1000),
+    DelayType.LONG_ASYNC: (0, 1500),
+}
+
+BOUNDS_DEFINITIONS: dict[BoundsType, tuple[int, int]] = {
+    BoundsType.EASY: (5, 35),
+    BoundsType.EASY_MEDIUM: (25, 55),
+    BoundsType.MEDIUM: (45, 75),
+    BoundsType.HARD: (65, 95),
+}
+
+REWARD_DEFINITIONS: dict[RewardType, int] = {
+    RewardType.LOW: 1,
+    RewardType.LOW_MIDDLE: 5,
+    RewardType.MIDDLE: 10,
+    RewardType.HIGH: 20,
+}
+
+DEFAULT_REWARD_YITTER = 0.5
+DEFAULT_BOUNDS_VARIATION = 3
+TOTAL_REWARD_MONEY = 6
+CURRENCY = 'EUR'
+
+MAX_PRACTICE_LOOP_RETRIES = 2
+HOLD_KEY_PRACTICE_DURATION = 5  # seconds
+HOLD_KEY_MIN_SUCCESSES = 2
+HOLD_KEY_MAX_FAILURES = 3
+
+CALIBRATION_DEFAULT_SEED_TAPS = 20
+
+NUM_CALIBRATION_WITHOUT_FEEDBACK_TRIALS = 4
+NUM_CALIBRATION_WITH_FEEDBACK_TRIALS = 3
+NUM_CALIBRATION_TRIALS = (
+    NUM_CALIBRATION_WITHOUT_FEEDBACK_TRIALS + NUM_CALIBRATION_WITH_FEEDBACK_TRIALS
+)
+
+NUM_FINAL_CALIBRATION_TRIALS_PART_1 = 3
+NUM_FINAL_CALIBRATION_TRIALS_PART_2 = 3
+
+MINIMUM_CALIBRATION_MEDIAN = 10
+MAX_CALIBRATION_CONSECUTIVE_LOW_TAP_FAILURES = 5
+EXPECTED_MAXIMUM_PERCENTAGE_FOR_CALIBRATION = 50
+
+PERCENTAGE_VALIDATION_TRIALS_SUCCESSFUL = 0.75
+NUM_VALIDATION_TRIALS = 4
+NUM_EXTRA_VALIDATION_TRIALS = 3
+
+NUM_DEMO_TRIALS = 3
+MINIMUM_DEMO_TAPS = 5
+FAILED_MINIMUM_DEMO_TAPS_DURATION = 3000  # ms
+
+TRIAL_DURATION = 5000  # ms
+TRIAL_DURATION_AGENCY_TASK = 10000  # ms
+
+GO_DURATION = 500  # ms
+SUCCESS_SCREEN_DURATION = 1500  # ms
+SUCCESS_SCREEN_DURATION_FREEZE_FRAME = 5000  # ms
+REHOLD_TIMEOUT = 500  # ms
+COUNTDOWN_TIME = 2  # seconds
+PREMATURE_KEY_RELEASE_ERROR_TIME = 1000  # ms
+KEY_TAPPED_EARLY_ERROR_TIME = 3000  # ms
+PATIENT_SAFETY_MARGIN = 3  # percent
+AGENCY_TAPPING_SAFETY_MARGIN = 10  # percent
+UPDATE_MEDIAN_TAPS_THRESHOLD = 2
+MAX_VALIDATION_FAILURES = 7
+MAX_VALIDATION_ATTEMPTS_PER_LEVEL = 3
+MAX_EXTRA_VALIDATION_ATTEMPTS = 3
+ENABLE_BUTTON_AFTER_TIME = 15000  # ms
+
+ACCEPT_OFFER_BUTTON = 'arrowright'
+DECLINE_OFFER_BUTTON = 'arrowleft'
+POINT_VALUE = 0.01
+DEMO_TRIAL_SET = [BoundsType.MEDIUM, BoundsType.HARD]
+NUMBER_OF_DEMO_TRIALS = len(DEMO_TRIAL_SET)
+MAIN_TASK_BREAK_DURATION = 30000  # ms
+
+# --------------------------------
+# Agency Tapping Task Constants
+# --------------------------------
+REQUIRED_TIME_IN_BOUNDS = 2000  # ms
+DEFAULT_BOUNDS = [30, 50]
+TASK_COMPLETION_BREAK_DURATION = 60000  # ms
+HALF_WIDTH_AGENCY_DELAY = 25
+AGENCY_MIN_TAPS = 5
+AGENCY_MAX_TAPS = 16
+MIN_TAPS_FOR_INTERRUPTION = AGENCY_MIN_TAPS
+PRACTICE_TRIAL_DURATION = TRIAL_DURATION
+
+CONTINUE_HINT = '\nClick the button below to proceed.'
+SKIP_HINT = '\n\n[Press SPACE to skip]'
+LEFT_HAND_KEY = 'left'
+RIGHT_HAND_KEY = 'right'
+

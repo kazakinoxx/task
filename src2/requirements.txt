@@ -1,0 +1,8 @@
+# NOTE: PsychoPy does not support Python 3.12+ (it fails to build on
+# Python 3.13, the version this repo was developed against). Create a
+# dedicated virtualenv with Python 3.10 or 3.11 to install/run this app:
+#   py -3.10 -m venv .venv310 && .venv310\Scripts\pip install -r src2/requirements.txt
+psychopy>=2024.1.0
+numpy>=1.24
+pyserial>=3.5
+pytest>=7.0

@@ -1,0 +1,8 @@
+{
+  "trials": [
+    {
+      "task": "experiment_begin",
+      "trial_type": "fullscreen"
+    }
+  ]
+}

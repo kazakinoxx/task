@@ -1,0 +1,12 @@
+{
+  "trials": [
+    {
+      "task": "experiment_begin",
+      "trial_type": "fullscreen"
+    },
+    {
+      "task": "sit_comfortably",
+      "trial_type": "html-button-response"
+    }
+  ]
+}

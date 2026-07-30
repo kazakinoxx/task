@@ -1,0 +1,22 @@
+{
+  "trials": [
+    {
+      "task": "hold_key_instructions",
+      "trial_type": "html-button-response"
+    },
+    {
+      "task": "hold-key-practice",
+      "success": true,
+      "trial_type": "hold-key-practice"
+    },
+    {
+      "task": "hold-key-practice",
+      "success": true,
+      "trial_type": "hold-key-practice"
+    },
+    {
+      "task": "hold_key_practice_complete",
+      "trial_type": "html-button-response"
+    }
+  ]
+}
