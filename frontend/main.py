@@ -96,16 +96,16 @@ def main() -> None:
     clock = build_clock()
     keyboard_monitor = build_keyboard_monitor(win, clock)
 
-    ble = BLEController.BLEController(
-        python313_path=r"C:/Users/ikaze/AppData/Local/Programs/Python/Python313/python.exe",
-        project_root=r"C:/Users/ikaze/Documents/EEGproj/versasens-gui-main",
-        opus_lib_path=r"C:/Users/ikaze/AppData/Local/Programs/Python/Python313",
-    )
-    ble.start()  #runs throughout the whole experiment, so we start it here and pass it to the phase runners   
+    # ble = BLEController.BLEController(
+    #     python313_path=r"C:/Users/ikaze/AppData/Local/Programs/Python/Python313/python.exe",
+    #     project_root=r"C:/Users/ikaze/Documents/EEGproj/versasens-gui-main",
+    #     opus_lib_path=r"C:/Users/ikaze/AppData/Local/Programs/Python/Python313",
+    # )
+    # ble.start()  #runs throughout the whole experiment, so we start it here and pass it to the phase runners   
 
     try:
         runners = make_phase_runners(
-            win, keyboard_monitor, clock, state, history, trigger_device, translator, args.participant, narration, ble
+            win, keyboard_monitor, clock, state, history, trigger_device, translator, args.participant, narration#, ble
         )
         try:
             run_experiment(state, reload_object, runners)

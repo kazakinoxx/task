@@ -16,8 +16,7 @@ class IntroductionPhase:
         history = self.context.history
         translator = self.context.translator
         narration = self.context.narration
-        ble = self.context.ble
-
+        
         def show_begin() -> dict:
             text = stimulus_text.experiment_begin_message(translator)
             message.run_message(win, kb, text, button_label='Start', align='center')

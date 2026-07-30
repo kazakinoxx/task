@@ -33,8 +33,8 @@ class PracticePhase:
         keyboard_monitor = self.context.keyboard_monitor
         clock = self.context.clock
         history = self.context.history
-        ble = self.context.ble
-        ble.start_recording()  # Start BLE recording at the beginning of the practice phase
+        # ble = self.context.ble
+        # ble.start_recording()  # Start BLE recording at the beginning of the practice phase
 
         suffix = 'l' if state.get_preferred_hand() == 'left' else 'r'
         hold_key_str = get_hold_keys(state)[0]

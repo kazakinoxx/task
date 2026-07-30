@@ -1,21 +1,25 @@
 {
   "trials": [
     {
-      "task": "hold_key_instructions",
+      "task": "experiment_begin",
+      "trial_type": "fullscreen"
+    },
+    {
+      "task": "sit_comfortably",
       "trial_type": "html-button-response"
     },
     {
-      "task": "hold-key-practice",
-      "success": true,
-      "trial_type": "hold-key-practice"
+      "task": "tutorial_introduction",
+      "trial_type": "html-button-response"
     },
     {
-      "task": "hold-key-practice",
-      "success": true,
-      "trial_type": "hold-key-practice"
+      "task": "preferred_hand",
+      "response": 1,
+      "preferredHand": "right",
+      "trial_type": "html-button-response"
     },
     {
-      "task": "hold_key_practice_complete",
+      "task": "hold_key_instructions",
       "trial_type": "html-button-response"
     }
   ]

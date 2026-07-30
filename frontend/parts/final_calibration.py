@@ -101,5 +101,5 @@ class FinalCalibrationPhase:
         run_calibration_loop(CalibrationPartType.FINAL_CALIBRATION_PART_2.value, state, history, runners)
 
         
-        ble.stop_recording()  # Stop BLE recording at the end of the calibration phase
-        ble.disconnect()  # Disconnect BLE device at the end of the calibration phase
+        # ble.stop_recording()  # Stop BLE recording at the end of the calibration phase
+        # ble.disconnect()  # Disconnect BLE device at the end of the calibration phase

@@ -168,17 +168,17 @@ def make_phase_runners(
     
 
     return PhaseRunners(
-        run_device_connect=connection.BLEConnectionPhase(context).run,
-        #run_introduction=introduction.IntroductionPhase(context).run,
+        #run_device_connect=connection.BLEConnectionPhase(context).run,
+        run_introduction=introduction.IntroductionPhase(context).run,
         run_practice=practice.PracticePhase(context).run,
         run_calibration=calibration.CalibrationPhase(context).run,
-        # run_validation=validation.ValidationPhase(context).run,
-        # run_continue_message=run_continue_message,
-        # run_task_core=task_core.TaskCorePhase(context).run,
-        # run_final_calibration=final_calibration.FinalCalibrationPhase(context).run,
-        # run_agency_task_core=agency_task_core.AgencyTaskCorePhase(context).run,
-        # run_end_of_agency_break=run_end_of_agency_break,
-        # run_end_page=run_end_page,
+        run_validation=validation.ValidationPhase(context).run,
+        run_continue_message=run_continue_message,
+        run_task_core=task_core.TaskCorePhase(context).run,
+        run_final_calibration=final_calibration.FinalCalibrationPhase(context).run,
+        run_agency_task_core=agency_task_core.AgencyTaskCorePhase(context).run,
+        run_end_of_agency_break=run_end_of_agency_break,
+        run_end_page=run_end_page,
     )
 
 
