@@ -181,6 +181,10 @@ def tutorial_header_2(t: Translator) -> str:
     return t.t('TUTORIAL_HEADER_2')
 
 
+def fixation_message(t: Translator) -> str:
+    return t.t('FIXATION_MESSAGE')
+
+
 def tutorial_introduction_message(t: Translator) -> str:
     return t.t('TUTORIAL_INTRODUCTION_MESSAGE')
 

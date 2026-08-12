@@ -99,7 +99,7 @@ def test_should_show_agency_false_when_skipped():
 
 
 def test_fresh_session_default_order_runs_full_sequence_with_break():
-    state = make_state(taskOrder='EBDMFirst')
+    state = make_state(taskOrder='EBDMFirst', useDevice=False)
     runners, calls = make_recording_runners()
     run_experiment(state, None, runners)
 
@@ -107,11 +107,12 @@ def test_fresh_session_default_order_runs_full_sequence_with_break():
     assert names == [
         'introduction', 'practice', 'calibration', 'validation',
         'task_core', 'final_calibration', 'end_of_agency_break', 'agency_task_core',
+        'end_page',
     ]
 
 
 def test_fresh_session_agency_first_order_flips_sequence():
-    state = make_state(taskOrder='AgencyFirst')
+    state = make_state(taskOrder='AgencyFirst', useDevice=False)
     runners, calls = make_recording_runners()
     run_experiment(state, None, runners)
 
@@ -119,6 +120,7 @@ def test_fresh_session_agency_first_order_flips_sequence():
     assert names == [
         'introduction', 'practice', 'calibration', 'validation',
         'agency_task_core', 'end_of_agency_break', 'task_core', 'final_calibration',
+        'end_page',
     ]
 
 
@@ -174,7 +176,10 @@ def test_resumed_session_remaining_trial_blocks_passed_through():
     assert task_core_call[1] == remaining
 
 
-def test_end_page_shown_only_when_next_step_configured():
+def test_end_page_always_shown():
+    # The end page is always shown as the final screen: run_end_page renders
+    # either the next-step link or a generic "experiment has ended" message,
+    # so it must run whether or not linkToNextPage is configured.
     settings = AllSettingsType()
     settings.nextStepSettings.linkToNextPage = True
     state = ExperimentState(settings)
@@ -186,4 +191,4 @@ def test_end_page_shown_only_when_next_step_configured():
     state2 = ExperimentState(settings2)
     runners2, calls2 = make_recording_runners()
     run_experiment(state2, None, runners2)
-    assert 'end_page' not in [c[0] for c in calls2]
+    assert calls2[-1][0] == 'end_page'

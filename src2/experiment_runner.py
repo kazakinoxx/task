@@ -114,5 +114,10 @@ def run_experiment(
             runners.run_end_of_agency_break()
         push_agency()
 
-    if state.get_next_step_settings().linkToNextPage and runners.run_end_page is not None:
+    # Always show the end page. run_end_page (via resolve_end_message_text)
+    # already renders either the next-step link OR a generic "experiment has
+    # ended" message, so gating it on linkToNextPage left a normal finish with
+    # no closing screen at all -- the window just shut. This also matches the
+    # abort path (main.py), which always shows that same message.
+    if runners.run_end_page is not None:
         runners.run_end_page()

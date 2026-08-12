@@ -70,6 +70,7 @@ from src2.utils.calculations import get_hold_keys, get_tap_key, resolve_link
 from src2.utils.constants import HOLD_KEY_MAX_FAILURES, MAIN_TASK_BREAK_DURATION, TASK_COMPLETION_BREAK_DURATION
 from device_connection.connect import connect_device
 
+from frontend.drawUtils.message import run_message
 from frontend.parts import introduction, practice, calibration, validation, task_core, agency_task_core,final_calibration, connection
 from frontend.parts.context import PhaseContext
 from device_connection import BLEController
@@ -128,7 +129,7 @@ def make_phase_runners(
         message's docstring) -- this is a status confirmation, not a
         connect/retry flow."""
         status_text = resolve_device_status_message(trigger_device)
-        run_message(win, keyboard_monitor, status_text + CONTINUE_HINT, continue_key='space')
+        run_message(win, keyboard_monitor, status_text + CONTINUE_HINT)
 
    
 
@@ -136,8 +137,12 @@ def make_phase_runners(
         """Port of continueMessageDirection (experiment.ts) -- shown
         instead of introduction/practice/calibration/validation when
         resuming a previously-started participant."""
-        text = f'<h2>{stimulus_text.continue_message_title(translator)}</h2>\n\n{stimulus_text.continue_message_direction(translator)}'
-        run_message(win, keyboard_monitor, text + CONTINUE_HINT, align = 'center')
+        header = f'<h2>{stimulus_text.continue_message_title(translator)}</h2>'
+        text = stimulus_text.continue_message_direction(translator)
+        run_message(
+            win, keyboard_monitor, text + CONTINUE_HINT, align='center',
+            header=header, header_pos=(0, 0.7), header_align='center', wrap_width=0.9,
+        )
 
     def run_end_of_agency_break() -> None:
         from frontend.drawUtils.message import run_break
@@ -155,7 +160,7 @@ def make_phase_runners(
 
         run_break(
             win, keyboard_monitor, clock, title, message_fn,
-            duration_ms=TASK_COMPLETION_BREAK_DURATION,
+            duration_ms=TASK_COMPLETION_BREAK_DURATION, continue_key='space'
         )
 
     def run_end_page() -> None:
@@ -163,12 +168,12 @@ def make_phase_runners(
         clickable in a desktop window, so the resolved URL is shown as
         plain informational text instead."""
         text = resolve_end_message_text(state, translator, participant_name)
-        message.run_message(win, keyboard_monitor, text + CONTINUE_HINT)
+        run_message(win, keyboard_monitor, text + CONTINUE_HINT)
 
     
 
     return PhaseRunners(
-        #run_device_connect=connection.BLEConnectionPhase(context).run,
+        # run_device_connect=connection.BLEConnectionPhase(context).run,
         run_introduction=introduction.IntroductionPhase(context).run,
         run_practice=practice.PracticePhase(context).run,
         run_calibration=calibration.CalibrationPhase(context).run,
@@ -176,8 +181,8 @@ def make_phase_runners(
         run_continue_message=run_continue_message,
         run_task_core=task_core.TaskCorePhase(context).run,
         run_final_calibration=final_calibration.FinalCalibrationPhase(context).run,
-        run_agency_task_core=agency_task_core.AgencyTaskCorePhase(context).run,
         run_end_of_agency_break=run_end_of_agency_break,
+        run_agency_task_core=agency_task_core.AgencyTaskCorePhase(context).run,
         run_end_page=run_end_page,
     )
 

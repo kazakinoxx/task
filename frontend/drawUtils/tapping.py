@@ -10,6 +10,11 @@ from typing import Callable, Optional
 
 from frontend.rich_text import RichText
 from frontend.style_constants import (
+    CHECKMARK_COLOR,
+    CHECKMARK_FLASH_DURATION,
+    CHECKMARK_LINE_WIDTH,
+    CHECKMARK_POS,
+    CHECKMARK_SIZE,
     DEFAULT_FONT,
     DEFAULT_WRAP_WIDTH,
     TAPPING_GO_HEADER_COLOR,
@@ -122,6 +127,19 @@ def run_tapping(
     state = TappingTaskState(params)
     thermometer = ThermometerStim(win) if params.show_thermometer else None
 
+    # Green checkmark briefly flashed on each tap during the tapping tutorial
+    # (the state machine only emits 'flash_checkmark' when task == 'practice',
+    # so it never shows for other tasks). Drawn in 'height' units so the glyph
+    # stays proportional regardless of the window's aspect ratio.
+    from psychopy import visual
+
+    checkmark = visual.ShapeStim(
+        win, vertices=[(-0.45, 0.05), (-0.12, -0.4), (0.5, 0.55)], closeShape=False,
+        lineColor=CHECKMARK_COLOR, lineWidth=CHECKMARK_LINE_WIDTH, units='height',
+        pos=CHECKMARK_POS, size=CHECKMARK_SIZE,
+    )
+    checkmark_deadline: Optional[float] = None
+
     now = clock.getTime()
     if state.start(now):
         return state.build_trial_record()
@@ -154,11 +172,27 @@ def run_tapping(
                         deadline = None
                     else:
                         deadline = event_time + params.trial_duration / 1000.0
+                # Per-tap green checkmark: on every practice tap
+                # ('flash_checkmark') and, for symmetry, on each freeze-frame
+                # demo tap after the first ('freeze_frame_subsequent_tap').
+                # NOTE: no tapping trial currently sets show_freeze_frame=True,
+                # so the freeze-frame branch is latent -- wired here for
+                # completeness so no emitted event is silently dropped.
+                if 'flash_checkmark' in ui_events or 'freeze_frame_subsequent_tap' in ui_events:
+                    checkmark_deadline = now + CHECKMARK_FLASH_DURATION
 
-        state.tick(now)
+        # tick() reports 'stopped_due_to_release' when the re-hold grace
+        # period lapses with a hold key still up: it has already set
+        # keysReleasedFlag and ended the trial, and the release warning has
+        # been on screen for the whole grace window, so exit the loop
+        # promptly rather than drawing another redundant frame.
+        if 'stopped_due_to_release' in state.tick(now):
+            break
 
-        # Thermometer update & draw
-        if thermometer is not None:
+        # Thermometer update & draw -- hidden while a hold key is released, so
+        # the "you released your keys" warning stands alone instead of
+        # overlapping the bar (the bar returns as soon as the keys are re-held).
+        if thermometer is not None and state.are_keys_held:
             thermometer.update(state.mercury_height, params.bounds)
             thermometer.draw()
 
@@ -179,6 +213,10 @@ def run_tapping(
         # Draw the flashing GO header (if active)
         if go_header is not None and state.showing_go_message:
             go_header.draw()
+
+        # Flash the per-tap checkmark (tapping tutorial only)
+        if checkmark_deadline is not None and now < checkmark_deadline:
+            checkmark.draw()
 
         # Flip the window – once per frame
         win.flip()

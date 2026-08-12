@@ -39,11 +39,13 @@ class AgencyTaskCorePhase:
         suffix = hand_suffix(state)
 
         # -- agency intro (before practice); JS has no narration here --
-        intro_text = f'<h2>{stimulus_text.agency_tapping_header(translator)}</h2>\n\n' \
-                     f'{stimulus_text.agency_task_intro_page(translator, state.get_key_settings())}'
+        intro_header = f'<h2>{stimulus_text.agency_tapping_header(translator)}</h2>'
+        intro_text = stimulus_text.agency_task_intro_page(translator, state.get_key_settings())
         message.run_message(
             win, keyboard_monitor, intro_text + CONTINUE_HINT, continue_key='space',
             image_path=resolve_image_path(f'agency-task-{translator.language}.png'),
+            image_pos=(0.4, 0), image_size=0.8, text_pos=(-0.5, 0), align='left',
+            header=intro_header, header_pos=(0, 0.7), header_align='center', wrap_width=0.9,
         )
         history.add({'task': 'agency_task_intro', 'trial_type': 'html-button-response'})
 
@@ -75,7 +77,7 @@ class AgencyTaskCorePhase:
                 key_to_press=get_tap_key(state)
             )
             return agency_tapping.run_agency_tapping(
-                win, keyboard_monitor, clock, params
+                win, keyboard_monitor, clock, params, translator
             )
 
         practice_runners = AgencyPracticeRunners(
@@ -102,7 +104,7 @@ class AgencyTaskCorePhase:
                 delay_original=selected_delay,
             )
             return agency_tapping.run_agency_tapping(
-                win, keyboard_monitor, clock, params
+                win, keyboard_monitor, clock, params, translator
             )
 
         core_runners = AgencyCoreRunners(

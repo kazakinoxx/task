@@ -226,5 +226,6 @@
   "INSTRUCTION_LABEL_TAPPING": "Key Tapping Task",
   "INSTRUCTION_LABEL_EBDM": "Tapping Offers Task",
   "INSTRUCTION_LABEL_AGENCY": "Tapping Control Task",
-  "SELECT_INSTRUCTION_TOPIC": "Select an instruction topic"
+  "SELECT_INSTRUCTION_TOPIC": "Select an instruction topic",
+  "FIXATION_MESSAGE": "Please keep your eyes on the cross."
 }

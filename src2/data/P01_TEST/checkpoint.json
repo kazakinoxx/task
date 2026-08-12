@@ -1,25 +1,7 @@
 {
   "trials": [
     {
-      "task": "experiment_begin",
-      "trial_type": "fullscreen"
-    },
-    {
-      "task": "sit_comfortably",
-      "trial_type": "html-button-response"
-    },
-    {
-      "task": "tutorial_introduction",
-      "trial_type": "html-button-response"
-    },
-    {
-      "task": "preferred_hand",
-      "response": 1,
-      "preferredHand": "right",
-      "trial_type": "html-button-response"
-    },
-    {
-      "task": "hold_key_instructions",
+      "task": "agency_task_intro",
       "trial_type": "html-button-response"
     }
   ]

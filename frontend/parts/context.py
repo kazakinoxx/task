@@ -6,7 +6,7 @@ from src2.data.data_writer import RecordingTrialHistory
 from src2.i18n.translator import Translator
 from src2.triggers.trigger_device import TriggerDevice
 # Import the BLEController (or use a forward reference if needed)
-from device_connection import BLEController
+from device_connection.BLEController import BLEController
 
 @dataclass
 class PhaseContext:

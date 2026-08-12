@@ -35,14 +35,14 @@ class FinalCalibrationPhase:
         narration = self.context.narration
 
         suffix = hand_suffix(state)
-        instructions_text = (
-            f'<h2>{stimulus_text.wrap_up_header(translator)}</h2>\n\n'
-            f'{stimulus_text.final_calibration_part_2_directions(translator, state.get_key_settings())}'
-        )
+        header = f'<h2>{stimulus_text.wrap_up_header(translator)}</h2>'
+        instructions_text = stimulus_text.final_calibration_part_2_directions(translator, state.get_key_settings())
         narration.play(resolve_audio_relative_path(f'final-calibration-instruction-{suffix}.mp3'))
         message.run_message(
             win, keyboard_monitor, instructions_text + CONTINUE_HINT, continue_key='space',
             image_path=resolve_image_path('calibration.png'),
+            image_pos=(0.4, 0), image_size=0.8, text_pos=(-0.5, 0), align='left',
+            header=header, header_pos=(0, 0.7), header_align='center', wrap_width=0.9,
         )
         narration.stop()
         history.add({'task': 'final_calibration_instructions', 'trial_type': 'html-button-response'})

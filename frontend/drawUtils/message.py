@@ -18,6 +18,7 @@ from frontend.style_constants import (
     MESSAGE_IMAGE_SIZE,
     MESSAGE_TEXT_POS_CENTERED,
     MESSAGE_TEXT_POS_WITH_IMAGE,
+    HEADER_TEXT_HEIGHT,
     MESSAGE_WRAP_WIDTH,
     TEXT_COLOR,
     TEXT_HEIGHT,
@@ -64,6 +65,9 @@ class StimConfig:
 
     text: TextStyle = field(default_factory=TextStyle)
     title: TextStyle = field(default_factory=lambda: TextStyle(height=TITLE_TEXT_HEIGHT, bold=True))
+    # Instruction-screen header: smaller than `title` because its <h2> tag is
+    # scaled up 1.6x by RichText (see HEADER_TEXT_HEIGHT).
+    header: TextStyle = field(default_factory=lambda: TextStyle(height=HEADER_TEXT_HEIGHT, bold=True))
     body: TextStyle = field(default_factory=TextStyle)
 
 
@@ -85,7 +89,27 @@ def _build_image_stim(win, image_path: Optional[Path], pos=MESSAGE_IMAGE_POS, si
         return None
 
     try:
-        return visual.ImageStim(win, image=str(image_path), pos=pos, size=size)
+        # `size` defines a bounding BOX in norm units (a scalar means a
+        # square box, side `size`); the image is scaled to *fit inside* that
+        # box while preserving its own pixel aspect ratio ("contain" fit) --
+        # so tall images don't overflow the width and wide images (e.g. the
+        # task-offer screenshots) don't overflow the height, and nothing is
+        # stretched. Without this, sizing by height alone let wide images
+        # run off the side of the screen.
+        from PIL import Image
+
+        with Image.open(image_path) as im:
+            img_w, img_h = im.size
+        half_w = win.size[0] / 2.0
+        half_h = win.size[1] / 2.0
+        box_x, box_y = (size, size) if not isinstance(size, (tuple, list)) else size
+
+        resolved_size = size
+        box_w_px, box_h_px = box_x * half_w, box_y * half_h
+        if img_w and img_h and box_w_px > 0 and box_h_px > 0:
+            scale = min(box_w_px / img_w, box_h_px / img_h)
+            resolved_size = (img_w * scale / half_w, img_h * scale / half_h)
+        return visual.ImageStim(win, image=str(image_path), pos=pos, size=resolved_size)
     except Exception:
         logger.exception('Failed to load image %s', image_path)
         return None
@@ -97,7 +121,7 @@ def _build_header_stim(
 ):
     if not header:
         return None
-    resolved = header_style or CONFIG.title
+    resolved = header_style or CONFIG.header
     return RichText(
         win, header, height=resolved.height, color=resolved.color, font=resolved.font,
         pos=header_pos, wrap_width=header_wrap_width if header_wrap_width is not None else resolved.wrap_width,
@@ -213,18 +237,22 @@ def run_break(
     message_fn: Callable[[float], str],
     duration_ms: float,
     skip_key: Optional[str] = None,
+    continue_key: Optional[str] = None,
     title_style: Optional[TextStyle] = None,
     body_style: Optional[TextStyle] = None,
 ) -> dict:
     """Live-updating countdown break screen. `message_fn(remaining_seconds)`
     rebuilds the body text every frame, matching the JS break screens'
-    `renderStimulus()` re-render on each `setInterval` tick. Ends early if
-    `skip_key` is released, otherwise after `duration_ms` elapses. Port of
-    endOfAgencyTaskBreak (parts/agency-task-core.ts), which always shows a
-    skip button unconditionally (unlike the per-N-trial agency break,
-    whose allowSkip is conditional and which is wired separately/more
-    simply in main.py's run_break). `title_style`/`body_style` override
-    the defaults (CONFIG.title/CONFIG.body)."""
+    `renderStimulus()` re-render on each `setInterval` tick. Ends early when
+    `skip_key` OR `continue_key` is released, otherwise after `duration_ms`
+    elapses (the two behave identically -- both let the participant leave the
+    break early; they're separate params only so callers can label the action
+    "skip" vs "continue" as fits the screen). Port of endOfAgencyTaskBreak
+    (parts/agency-task-core.ts), which always shows a skip button
+    unconditionally (unlike the per-N-trial agency break, whose allowSkip is
+    conditional and which is wired separately/more simply in main.py's
+    run_break). `title_style`/`body_style` override the defaults
+    (CONFIG.title/CONFIG.body)."""
     from psychopy import visual
 
     resolved_title_style = title_style or CONFIG.title
@@ -232,19 +260,19 @@ def run_break(
     title_stim = visual.TextStim(win, text=title, pos=BREAK_TITLE_POS, **resolved_title_style.to_kwargs())
     body_stim = visual.TextStim(win, text='', pos=BREAK_BODY_POS, **resolved_body_style.to_kwargs())
 
-    skip_key_lower = skip_key.lower() if skip_key else None
+    exit_keys = {k.lower() for k in (skip_key, continue_key) if k}
     start_time = clock.getTime()
-    skipped = False
+    ended = False
 
     while True:
         elapsed_ms = (clock.getTime() - start_time) * 1000.0
         remaining_seconds = resolve_break_remaining_seconds(elapsed_ms, duration_ms)
 
         for key, event_type, _ in keyboard_monitor.poll():
-            if skip_key_lower is not None and event_type == 'up' and key.lower() == skip_key_lower:
-                skipped = True
+            if event_type == 'up' and key.lower() in exit_keys:
+                ended = True
 
-        if skipped or remaining_seconds <= 0:
+        if ended or remaining_seconds <= 0:
             break
 
         body_stim.text = message_fn(remaining_seconds)

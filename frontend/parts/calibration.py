@@ -41,7 +41,7 @@ class CalibrationPhase:
             win, keyboard_monitor, instructions_text + CONTINUE_HINT,
             image_path=resolve_image_path('calibration.png'),
             header=header, header_pos=(0, 0.7), header_align='center', wrap_width=0.9,
-            align='left', text_pos=(-0.5, 0), image_pos=(0.4, 0), image_size=(0.3, 1)
+            align='left', text_pos=(-0.5, 0), image_pos=(0.4, 0), image_size=0.8
         )
         narration.stop()
         history.add({'task': 'calibration_instructions', 'trial_type': 'html-button-response'})

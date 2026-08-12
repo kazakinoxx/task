@@ -206,5 +206,6 @@
   "START_FIRST_AGENCY_TAP_INSTRUCTIONS": "Après le message « GO ! », tapez la touche <span class='tap-key'>{{TAP_KEY}}</span> aussi vite que possible pour faire entrer la barre rouge dans la zone cible bleue.",
   "KEEP_IN_TARGET_AGENCY_FREEZE_FRAME_INSTRUCTIONS": "Très bien ! Maintenez maintenant la barre rouge dans la zone cible.",
   "GET_BACK_IN_TARGET_MESSAGE": "Continuez à taper pour maintenir la barre rouge dans la zone cible bleue !",
-  "BAR_MESSAGE": "Maintenez le rouge dans la barre bleue..."
+  "BAR_MESSAGE": "Maintenez le rouge dans la barre bleue...",
+  "FIXATION_MESSAGE": "Gardez les yeux fixés sur la croix."
 }

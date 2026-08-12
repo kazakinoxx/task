@@ -8,7 +8,7 @@
     "taskOrder": "EBDMFirst"
   },
   "languageSettings": {
-    "language": "fr"
+    "language": "en"
   },
   "practiceSettings": {
     "numberOfPracticeLoops": 0
@@ -37,7 +37,7 @@
   "taskSettings": {
     "taskBlockRepetitions": 1,
     "taskPermutationRepetitions": 1,
-    "taskBlocksIncluded": ["sync", "shortAsync", "midAsync", "longAsync"],
+    "taskBlocksIncluded": ["sync", "shortasync", "midasync", "longasync"],
     "taskBoundsIncluded": ["easy", "hard"],
     "taskRewardsIncluded": ["low", "high"],
     "randomSkipChance": 0,

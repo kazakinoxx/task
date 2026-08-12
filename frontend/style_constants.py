@@ -42,6 +42,21 @@ SUCCESS_COLOR = 'green'  # CSS .active / .right-arrow green
 FAILURE_COLOR = 'red'    # CSS .left-arrow fill: red
 SKIP_COLOR = 'gray'
 
+# per-tap "checkmark" flashed during the tapping tutorial (task == 'practice')
+CHECKMARK_COLOR = '#568259'      # green
+CHECKMARK_POS = (0, 0.3)         # height units (see run_tapping); above the center prompt
+CHECKMARK_SIZE = 0.05            # height units -- overall glyph scale
+CHECKMARK_LINE_WIDTH = 6
+CHECKMARK_FLASH_DURATION = 0.25  # seconds each tap's checkmark stays visible
+
+# post-introduction fixation-cross screen (a centered '+' shown for a few
+# seconds so the participant settles and fixates before the tasks begin)
+FIXATION_CROSS_COLOR = 'black'
+FIXATION_CROSS_SIZE = 0.12        # height units -- arm span of the cross
+FIXATION_CROSS_THICKNESS = 0.02   # height units -- stroke thickness
+FIXATION_MESSAGE_POS = (0, -0.35)  # norm units, below the cross
+FIXATION_DURATION = 3.0           # seconds the fixation screen stays up
+
 # thermometer stimulus
 THERMOMETER_OUTLINE_COLOR = 'black'  # CSS #thermometer border: 2px solid black
 THERMOMETER_MERCURY_COLOR = 'red'    # CSS #mercury background-color: red
@@ -64,7 +79,11 @@ TEXT_HEIGHT = 0.05           # default body / prompt text
 TEXT_HEIGHT_SMALL = 0.04     # loading-bar label + caption
 TEXT_HEIGHT_PREAMBLE = 0.045  # likert preamble header
 FEEDBACK_TEXT_HEIGHT = 0.06  # success/failure screen
-TITLE_TEXT_HEIGHT = 0.1    # message/break-screen title
+TITLE_TEXT_HEIGHT = 0.1    # break-screen title (plain TextStim, no <h2> scaling)
+# Instruction-screen header (`header=` in message.run_message). Kept small
+# because the header text carries an <h2> tag, which RichText scales up by
+# 1.6x -- so the on-screen size is ~0.05*1.6 = 0.08, not 0.05.
+HEADER_TEXT_HEIGHT = 0.05
 DEFAULT_WRAP_WIDTH = 1.6     # trial screens
 MESSAGE_WRAP_WIDTH = 1.2     # message / instruction / break screens
 
@@ -94,11 +113,11 @@ LOADING_BAR_CAPTION_POS = (0, 0.16)
 MESSAGE_TEXT_POS_CENTERED = (0, 0)
 MESSAGE_TEXT_POS_WITH_IMAGE = (0, 0.5)
 MESSAGE_IMAGE_POS = (0, -0.5)
-MESSAGE_IMAGE_SIZE = 0,5
+MESSAGE_IMAGE_SIZE = 0.5  # desired image *height* in norm units; width is derived from the image's aspect ratio
 
 # timed-break screen
-BREAK_TITLE_POS = (0, 0.15)
-BREAK_BODY_POS = (0, -0.05)
+BREAK_TITLE_POS = (0, 0.45)   # title sits near the top, clear of the body
+BREAK_BODY_POS = (0, 0.0)
 
 # clickable buttons (norm units)
 BUTTON_WIDTH = 0.45
@@ -113,6 +132,20 @@ BUTTON_X_OFFSET = 0.3     # horizontal offset from center for a 2-button row (+/
 THERMOMETER_WIDTH = 75  # CSS #thermometer width: 200px
 THERMOMETER_HEIGHT = 250
 THERMOMETER_UNITS = 'pix'
+
+# --------------------------------------------------------------------------
+# Agency interruption "question" card (shown while a core/practice trial is
+# paused mid-trial for the Y/N control question) -- norm units
+# --------------------------------------------------------------------------
+INTERRUPTION_BOX_COLOR = '#ffe066'        # yellow pause card
+INTERRUPTION_BOX_LINE_COLOR = 'black'
+INTERRUPTION_BOX_WIDTH = 1.3
+INTERRUPTION_BOX_HEIGHT = 0.95
+INTERRUPTION_TITLE_POS = (0, 0.30)
+INTERRUPTION_QUESTION_POS = (0, 0.10)
+INTERRUPTION_OPTIONS_POS = (0, -0.12)
+INTERRUPTION_RELEASE_POS = (0, -0.30)
+INTERRUPTION_WRAP_WIDTH = 1.1
 
 # --------------------------------------------------------------------------
 # Loading bar geometry (norm units)

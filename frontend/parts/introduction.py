@@ -1,4 +1,5 @@
 import frontend.drawUtils.message as message
+from frontend.drawUtils.fixation import run_fixation
 from src2.parts.introduction import IntroductionRunners, run_introduction
 import src2.i18n.stimulus_text as stimulus_text
 from src2.ui.assets import resolve_audio_relative_path, resolve_image_path
@@ -12,6 +13,7 @@ class IntroductionPhase:
     def run(self) -> None:
         win = self.context.win
         kb = self.context.keyboard_monitor
+        clock = self.context.clock
         state = self.context.state
         history = self.context.history
         translator = self.context.translator
@@ -61,3 +63,8 @@ class IntroductionPhase:
             ask_preferred_hand
         )
         run_introduction(state, history, runners)
+
+        # -- fixation cross: a centered '+' held for a few seconds so the
+        # participant settles/fixates before the tasks begin --
+        run_fixation(win, clock, text=stimulus_text.fixation_message(translator))
+        history.add({'task': 'fixation', 'trial_type': 'fixation'})

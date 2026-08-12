@@ -17,7 +17,7 @@ from src2.ui.thermometer_stim import bound_marker_y, mercury_rect_geometry, targ
 
 
 class ThermometerStim:
-    def __init__(self, win, pos=(0, 0), width=THERMOMETER_WIDTH, height=THERMOMETER_HEIGHT, skip_frames=2):
+    def __init__(self, win, pos=(0, 0), width=THERMOMETER_WIDTH, height=THERMOMETER_HEIGHT, skip_frames=1):
         from psychopy import visual
 
         self.win = win
@@ -83,9 +83,13 @@ class ThermometerStim:
             self.upper_bound_line.end = (self.pos[0] + half_w, upper_y)
 
     def draw(self) -> None:
-        """Draw the thermometer (all elements)."""
-        self.outline.draw()
+        """Draw the thermometer, back-to-front, so the stacking priority is
+        black > red > blue: the blue target area sits at the back, the red
+        mercury bar over it, and the black outline + bound lines on top (so
+        the outline reads as a clean frame in front of the red bar rather
+        than being hidden behind it)."""
         self.target_area.draw()
+        self.mercury.draw()
+        self.outline.draw()
         self.lower_bound_line.draw()
         self.upper_bound_line.draw()
-        self.mercury.draw()
