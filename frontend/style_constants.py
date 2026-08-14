@@ -16,7 +16,7 @@ from __future__ import annotations
 # --------------------------------------------------------------------------
 # Window
 # --------------------------------------------------------------------------
-WINDOW_FULLSCREEN = True
+WINDOW_FULLSCREEN = False
 WINDOW_COLOR = 'white'  # CSS .jspsych-display-element background-color: #ffffff
 WINDOW_UNITS = 'norm'
 
@@ -105,6 +105,10 @@ LIKERT_QUESTION_PROMPT_OFFSET = 0.06  # prompt sits this far above its own slide
 LIKERT_QUESTION_TEXT_HEIGHT = 0.032
 LIKERT_SLIDER_WIDTH = 1.3
 LIKERT_SLIDER_HEIGHT = 0.05
+# per-tick response labels under each slider ("Strongly Disagree" ... "Strongly
+# Agree"); kept small and wrappable so 7 labels fit under the slider width
+LIKERT_LABEL_TEXT_HEIGHT = 0.022
+LIKERT_LABEL_WRAP_WIDTH = 0.16
 LIKERT_CONTINUE_BUTTON_POS = (0, -0.82)
 LOADING_BAR_LABEL_POS = (0, 0.08)
 LOADING_BAR_CAPTION_POS = (0, 0.16)

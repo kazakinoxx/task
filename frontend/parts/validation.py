@@ -124,6 +124,7 @@ class ValidationPhase:
             LikertSurveyParams(list(likert_questions.keys()), randomize_question_order=False),
             preamble=likert_preamble,
             continue_label=stimulus_text.continue_button_message(translator),
+            labels=stimulus_text.likert_final_question_labels(translator),
         )
         narration.stop()
         history.add({**likert_result, 'trial_type': 'survey-likert', 'additional': True, 'validation': True})

@@ -9,11 +9,10 @@ def test_resolve_image_path_returns_path_for_existing_file():
 
 
 def test_resolve_image_path_returns_none_for_missing_file():
-    # Mirrors two JS asset references that are broken in the source app
-    # itself (two-offer-view-{en,fr}.png, agency-task-en.png) -- callers
-    # must degrade gracefully (skip the image) rather than crash.
-    assert resolve_image_path('two-offer-view-en.png') is None
-    assert resolve_image_path('agency-task-en.png') is None
+    # A genuinely absent asset must degrade gracefully (return None so the
+    # caller skips the image) rather than crash. (The previously-listed
+    # two-offer-view-*/agency-task-en.png images DO ship in the source app
+    # and are now present in assets, so they are no longer examples here.)
     assert resolve_image_path('definitely-not-a-real-file.png') is None
 
 

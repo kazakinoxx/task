@@ -13,7 +13,12 @@ from __future__ import annotations
 
 from typing import Optional
 
-from src2.utils.constants import MINIMUM_CALIBRATION_MEDIAN, SUCCESS_SCREEN_DURATION, SUCCESS_SCREEN_DURATION_FREEZE_FRAME
+from src2.utils.constants import (
+    MINIMUM_CALIBRATION_MEDIAN,
+    SUCCESS_SCREEN_DURATION,
+    SUCCESS_SCREEN_DURATION_FREEZE_FRAME,
+    SUCCESS_SCREEN_FREE_TRIAL_DURATION,
+)
 from src2.utils.trial_history import (
     TrialHistory,
     check_flag,
@@ -38,7 +43,10 @@ def build_success_trial_record(success: bool) -> dict:
 
 
 def resolve_basic_success_screen_params(history: TrialHistory, skip: bool = False) -> dict:
-    """Port of the `successScreen` helper."""
+    """Port of the `successScreen` helper. A skipped (free) trial holds the
+    screen for SUCCESS_SCREEN_FREE_TRIAL_DURATION, a normal one for
+    SUCCESS_SCREEN_DURATION -- mirroring `trial_duration: skip ?
+    SUCCESS_SCREEN_FREE_TRIAL_DURATION : SUCCESS_SCREEN_DURATION`."""
     success = check_flag(history, 'task-plugin', 'success')
     return {
         'task': 'success',
@@ -46,7 +54,7 @@ def resolve_basic_success_screen_params(history: TrialHistory, skip: bool = Fals
         'skip': skip,
         'show_freeze_frame': False,
         'reason_code': None,
-        'trial_duration': SUCCESS_SCREEN_DURATION / 1000.0,
+        'trial_duration': (SUCCESS_SCREEN_FREE_TRIAL_DURATION if skip else SUCCESS_SCREEN_DURATION) / 1000.0,
     }
 
 

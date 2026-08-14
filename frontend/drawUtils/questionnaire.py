@@ -16,6 +16,8 @@ from frontend.style_constants import (
     DEFAULT_FONT,
     DEFAULT_WRAP_WIDTH,
     LIKERT_CONTINUE_BUTTON_POS,
+    LIKERT_LABEL_TEXT_HEIGHT,
+    LIKERT_LABEL_WRAP_WIDTH,
     LIKERT_PREAMBLE_POS,
     LIKERT_QUESTION_PROMPT_OFFSET,
     LIKERT_QUESTION_TEXT_HEIGHT,
@@ -37,7 +39,7 @@ from src2.trials.likert_trial import (
 
 def run_questionnaire(
     win, keyboard_monitor, question_texts: Dict[str, str], params: LikertSurveyParams,
-    preamble: str = '', continue_label: Optional[str] = None,
+    preamble: str = '', continue_label: Optional[str] = None, labels=None,
 ) -> dict:
     """`preamble` is drawn as a persistent header above the question
     list (port of the survey-likert plugin's `preamble` field). All
@@ -46,8 +48,20 @@ def run_questionnaire(
     'Continue') labels the button at the bottom, which only responds to
     clicks once every slider has a rating -- port of the plugin's
     `required: true` on every question, enforced before the page can be
-    submitted."""
+    submitted.
+
+    `labels` puts the response wording under each slider tick (port of the
+    survey-likert questions' `labels` arrays): pass a single 7-item list to
+    use the same labels on every question (e.g. Strongly Disagree ... Strongly
+    Agree), or a {question_key: [labels]} dict for per-question labels (the
+    final AMF survey's endpoint-only Low/High). None keeps the sliders
+    unlabelled."""
     from psychopy import event, visual
+
+    def labels_for(key: str):
+        if isinstance(labels, dict):
+            return labels.get(key)
+        return labels
 
     question_order = build_question_order(params)
 
@@ -71,8 +85,9 @@ def run_questionnaire(
             height=LIKERT_QUESTION_TEXT_HEIGHT, color=TEXT_COLOR, font=DEFAULT_FONT, wrapWidth=DEFAULT_WRAP_WIDTH, 
         ))
         sliders.append(visual.Slider(
-            win, ticks=SEVEN_POINT_SCALE, labels=None, granularity=1, style='rating',
-            pos=(0, y), size=(LIKERT_SLIDER_WIDTH, LIKERT_SLIDER_HEIGHT),lineColor = 'black'
+            win, ticks=SEVEN_POINT_SCALE, labels=labels_for(key), granularity=1, style='rating',
+            pos=(0, y), size=(LIKERT_SLIDER_WIDTH, LIKERT_SLIDER_HEIGHT), lineColor='black',
+            labelColor=TEXT_COLOR, labelHeight=LIKERT_LABEL_TEXT_HEIGHT, labelWrapWidth=LIKERT_LABEL_WRAP_WIDTH,
         ))
 
     continue_button = Button(win, continue_label or 'Continue', pos=LIKERT_CONTINUE_BUTTON_POS)

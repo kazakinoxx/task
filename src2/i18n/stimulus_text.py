@@ -765,9 +765,11 @@ def likert_intro_demo(t: Translator) -> str:
 
 
 def likert_responses(t: Translator) -> Dict[str, str]:
+    # 7-point scale in ascending order (1 -> 7), matching the JS
+    # survey-likert `labels` array.
     keys = [
-        'STRONGLY_DISAGREE', 'SOMEWHAT_DISAGREE', 'DISAGREE', 'NEUTRAL',
-        'AGREE', 'SOMEWHAT_AGREE', 'STRONGLY_AGREE',
+        'STRONGLY_DISAGREE', 'DISAGREE', 'SOMEWHAT_DISAGREE', 'NEUTRAL',
+        'SOMEWHAT_AGREE', 'AGREE', 'STRONGLY_AGREE',
     ]
     return {k: t.t(f'LIKERT_RESPONSES.{k}') for k in keys}
 
@@ -805,6 +807,25 @@ def likert_survey_2_questions(t: Translator) -> Dict[str, str]:
 
 def likert_survey_3_questions(t: Translator) -> Dict[str, str]:
     return {f'QUESTION_{i}': t.t(f'LIKERT_SURVEY_3_QUESTIONS.QUESTION_{i}') for i in range(1, 6)}
+
+
+def likert_final_question_labels(t: Translator) -> Dict[str, List[str]]:
+    """Per-question 7-point tick labels for the final AMF survey. Only the
+    endpoints carry text (the question-specific Low/High wording); the middle
+    points show just their number -- port of likertFinalQuestion's `labels`
+    arrays (`1 <br /> LOW` ... `7 <br /> HIGH`). QUESTION_1..5 map to
+    attention, motivation, fatigue, tiredness, frustration in order."""
+    scales = [
+        likert_responses_attention(t),
+        likert_responses_motivation(t),
+        likert_responses_fatigue(t),
+        likert_responses_tiredness(t),
+        likert_responses_frustration(t),
+    ]
+    return {
+        f'QUESTION_{i}': [f'1\n{resp["LOW"]}', '2', '3', '4', '5', '6', f'7\n{resp["HIGH"]}']
+        for i, resp in enumerate(scales, start=1)
+    }
 
 
 # --------------------------------

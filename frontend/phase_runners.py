@@ -174,9 +174,9 @@ def make_phase_runners(
 
     return PhaseRunners(
         # run_device_connect=connection.BLEConnectionPhase(context).run,
-        run_introduction=introduction.IntroductionPhase(context).run,
-        run_practice=practice.PracticePhase(context).run,
-        run_calibration=calibration.CalibrationPhase(context).run,
+        # run_introduction=introduction.IntroductionPhase(context).run,
+        # run_practice=practice.PracticePhase(context).run,
+        # run_calibration=calibration.CalibrationPhase(context).run,
         run_validation=validation.ValidationPhase(context).run,
         run_continue_message=run_continue_message,
         run_task_core=task_core.TaskCorePhase(context).run,

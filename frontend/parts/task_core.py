@@ -167,16 +167,20 @@ class TaskCorePhase:
                     LikertSurveyParams(list(questions.keys()), randomize_question_order=True),
                     preamble=preamble,
                     continue_label=stimulus_text.continue_button_message(translator),
+                    labels=list(stimulus_text.likert_responses(translator).values()),
                 )
                 narration.stop()
                 return result
 
             def reminder() -> dict:
-                text = f'{stimulus_text.remember_page_title(translator)}\n\n{stimulus_text.remember_page_directions(translator, state)}'
+                header = f'<h2>{stimulus_text.remember_page_title(translator)}</h2>'
+                text = stimulus_text.remember_page_directions(translator, state)
                 narration.play(resolve_audio_relative_path('task-reminder.mp3'))
                 message.run_message(
                     win, keyboard_monitor, text + CONTINUE_HINT, continue_key='space',
                     image_path=resolve_image_path(f'two-offer-view-{translator.language}.png'),
+                    image_pos=(0.4, 0), image_size=0.8, text_pos=(-0.5, 0), align='left',
+                    header=header, header_pos=(0, 0.7), header_align='center', wrap_width=0.9,
                 )
                 narration.stop()
                 return {'task': 'remember_direction'}
@@ -197,6 +201,7 @@ class TaskCorePhase:
                     LikertSurveyParams(list(questions.keys()), randomize_question_order=True),
                     preamble=preamble,
                     continue_label=stimulus_text.continue_button_message(translator),
+                    labels=list(stimulus_text.likert_responses(translator).values()),
                 )
                 narration.stop()
                 return result
@@ -210,6 +215,7 @@ class TaskCorePhase:
                     LikertSurveyParams(list(questions.keys()), randomize_question_order=False),
                     preamble=preamble,
                     continue_label=stimulus_text.continue_button_message(translator),
+                    labels=stimulus_text.likert_final_question_labels(translator),
                 )
                 narration.stop()
                 return {**result, 'additional': True, 'validation': True}

@@ -16,9 +16,19 @@ from frontend.style_constants import (
 from src2.ui.thermometer_stim import bound_marker_y, mercury_rect_geometry, target_area_rect_geometry
 
 
+# Time constant for easing the drawn mercury toward its true height, matching
+# the web app's `#mercury { transition: height 0.1s linear; }` -- without it the
+# PsychoPy bar snaps between discrete tap/decay steps and looks choppy next to
+# the browser's animated one.
+MERCURY_SMOOTH_TIME = 0.1  # seconds
+
+
 class ThermometerStim:
     def __init__(self, win, pos=(0, 0), width=THERMOMETER_WIDTH, height=THERMOMETER_HEIGHT, skip_frames=1):
         from psychopy import visual
+        import time as _time
+
+        self._time = _time
 
         self.win = win
         self.pos = pos
@@ -45,25 +55,32 @@ class ThermometerStim:
 
         # Cached geometry
         self._bounds = None
-        self._last_mercury_height = 0.0
-        self._skip_frames = skip_frames
-        self._frame_counter = 0
+        # Drawn (eased) height vs. the true target height. The drawn value
+        # glides toward the target so the bar animates smoothly between the
+        # discrete mercury steps (see MERCURY_SMOOTH_TIME).
+        self._displayed_height = 0.0
+        self._last_time = None
 
     def update(self, mercury_height_percent: float, bounds: Tuple[float, float]) -> None:
-        """Update mercury height (and static positions if bounds change)."""
-        # Increment counter and only update geometry every N frames
-        self._frame_counter += 1
-        if self._frame_counter % self._skip_frames != 0:
-            # Use cached values for drawing
-            return
+        """Update mercury height (and static positions if bounds change).
 
-        # Update mercury geometry
+        The drawn height eases toward `mercury_height_percent` over
+        ~MERCURY_SMOOTH_TIME, framerate-independently (using the real elapsed
+        time between calls), so the bar reads as a smooth glide rather than
+        snapping on each tap/decay step -- matching the web app's CSS
+        `transition: height 0.1s linear`."""
+        now = self._time.perf_counter()
+        dt = (now - self._last_time) if self._last_time is not None else 0.0
+        self._last_time = now
+        alpha = 1.0 if MERCURY_SMOOTH_TIME <= 0 else min(1.0, dt / MERCURY_SMOOTH_TIME)
+        self._displayed_height += (mercury_height_percent - self._displayed_height) * alpha
+
+        # Update mercury geometry from the eased height
         _, _, w, h = mercury_rect_geometry(
-            mercury_height_percent, self._bottom_left, self.width, self.height
+            self._displayed_height, self._bottom_left, self.width, self.height
         )
         self.mercury.height = max(h, 0.001)
         self.mercury.pos = (self.pos[0], self._bottom_left[1] + self.mercury.height / 2)
-        self._last_mercury_height = mercury_height_percent
 
         # Update static elements if bounds changed
         if bounds != self._bounds:
