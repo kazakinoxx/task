@@ -142,6 +142,14 @@ def main() -> None:
             text = resolve_end_message_text(state, translator, args.participant)
             message.run_message(win, keyboard_monitor, text + CONTINUE_HINT, continue_key='space')
     finally:
+        # ble.close() stops (and thereby saves) any recording still in progress
+        # before terminating the worker, so a crash or early window-close doesn't
+        # lose the EEG data. Guarded so a BLE cleanup failure can't prevent the
+        # task-data finalize / window close below.
+        try:
+            ble.close()
+        except Exception:
+            logging.exception("Error shutting down BLE worker")
         data_writer.finalize()
         trigger_device.close()
         win.close()

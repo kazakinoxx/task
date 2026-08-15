@@ -16,7 +16,7 @@ from __future__ import annotations
 # --------------------------------------------------------------------------
 # Window
 # --------------------------------------------------------------------------
-WINDOW_FULLSCREEN = False
+WINDOW_FULLSCREEN = True
 WINDOW_COLOR = 'white'  # CSS .jspsych-display-element background-color: #ffffff
 WINDOW_UNITS = 'norm'
 

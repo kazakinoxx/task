@@ -21,6 +21,10 @@ class BLEController:
         self._reader_thread: Optional[threading.Thread] = None
         self._lock = threading.Lock()
         self._started = False
+        # Tracks whether an EEG recording is currently in progress, so close()
+        # can stop (and thereby save) it if the experiment ends before the
+        # normal stop_recording() call (e.g. a crash or the window being closed).
+        self._recording = False
 
         # ---- Serial marker port ----
         self.marker_ser: Optional[serial.Serial] = None
@@ -84,10 +88,14 @@ class BLEController:
 
     def start_recording(self, timeout: float = 5.0) -> Dict[str, Any]:
         print("Starting BLE recording...")
-        return self._send_command("start_record", timeout=timeout)
+        resp = self._send_command("start_record", timeout=timeout)
+        self._recording = True
+        return resp
 
     def stop_recording(self, timeout: float = 5.0) -> Dict[str, Any]:
-        return self._send_command("stop_record", timeout=timeout)
+        resp = self._send_command("stop_record", timeout=timeout)
+        self._recording = False
+        return resp
 
     def lead_off_check(self, timeout: float = 5.0) -> Dict[str, Any]:
         print("Performing lead-off check...")
@@ -97,7 +105,20 @@ class BLEController:
         return self._send_command("set_subject", timeout=timeout, subject_id=subject_id, notes=notes)
 
     def close(self) -> None:
-        """Terminate the BLE worker and close the marker serial port."""
+        """Terminate the BLE worker and close the marker serial port.
+
+        If a recording is still in progress -- i.e. the experiment ended before
+        final_calibration's stop_recording() ran, as happens on a crash or when
+        the window is closed early -- stop it first so the EEG data is flushed to
+        disk by the worker instead of being lost when the process is terminated.
+        This is best-effort: cleanup must never raise.
+        """
+        if self._started and self._recording and self.proc and self.proc.poll() is None:
+            try:
+                self.stop_recording()   # sends stop_record -> worker saves the file
+            except Exception:
+                sys.stderr.write("[BLEController] Failed to stop/save recording on shutdown\n")
+                sys.stderr.flush()
         if self.proc and self.proc.poll() is None:
             self.proc.terminate()
             self.proc.wait()

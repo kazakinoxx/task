@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 # positions) -- tune them against the actual PNG on a real display. There must
 # be one entry here for every non-None name in CHANNEL_MAP.
 ELECTRODE_POSITIONS = {
-    "Fp1": (-0.04, 0.70),   # left frontal pole
-    "Fp2": (0.04,  0.70),   # right frontal pole
+    "Fp1": (-0.04, 0.65),   # left frontal pole
+    "Fp2": (0.04,  0.65),   # right frontal pole
     "C3":  (-0.07, 0.50),   # left central
     "C4":  (0.07,  0.50),   # right central
     "O1":  (-0.03, 0.30),   # left occipital
