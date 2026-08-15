@@ -1,0 +1,106 @@
+[project]
+name = "versasens-gui"
+version = "0.1.0"
+description = "GUI to stream and import data from a VersaSens device."
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "bleak>=1.0.1",
+    "colorama>=0.4.6",
+    "dynaconf>=3.2.13",
+    "matplotlib>=3.10.3",
+    "nuitka[all]>=4.0.7",
+    "numpy>=2.3.1",
+    "opuslib>=3.0.1",
+    "pandas>=2.3.1",
+    "pyqtgraph>=0.13.7",
+    "pyside6==6.9.0",
+    "rich>=14.0.0",
+    "scipy>=1.16.0",
+    "soundfile>=0.13.1",
+    "structlog>=25.5.0",
+    "tqdm>=4.67.1",
+]
+
+[dependency-groups]
+dev = [
+    "jinja2>=3.1.6",
+    "pre-commit>=4.5.0",
+    "pyinstaller>=6.14.2",
+    "pyperclip>=1.11.0",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+    "pytest-cov>=6.2.1",
+    "pytest-html>=4.1.1",
+    "pytest-qt>=4.5.0",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.12.5",
+    "scipy-stubs>=1.16.1.0",
+]
+
+[tool.ruff]
+exclude = [
+    ".git",
+    ".idea",
+    ".mypy_cache",
+    ".tox",
+    ".venv",
+    "__init__.py",
+    "src/generated",
+]
+target-version = "py313"
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+ignore = [
+    "TD002",  # missing-todo-author
+    "TD003",  # missing-todo-link
+    "ANN003", # missing-type-kwargs
+    "D203",   # one-blank-line-before-class
+    "D212",   # multi-line-summary-first-line
+]
+select = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = [
+    "S101",    # assert
+    "D100",    # undocumented-public-module
+    "DTZ005",  # call-datetime-now-without-tzinfo
+    "ANN201",  # missing-return-type-undocumented-public-function
+    "D103",    # undocumented-public-function
+    "S311",    # suspicious-non-cryptographic-random-usage
+    "SLF001",  # private-member-access
+    "PLR2004", # magic-value-comparison
+    "D102",    # undocumented-public-method
+    "B905",    # zip-without-explicit-strict
+    "ANN001",  # missing-type-function-argument
+    "PLR0913", # too-many-arguments
+    "D101",    # undocumented-public-class
+]
+
+[tool.ruff.lint.mccabe]
+# Flake8 is 15 - which I feel is too high
+max-complexity = 10
+
+[tool.pyright]
+# To get correct imports
+include = ["src", "tests", "scripts"]
+extraPaths = []
+
+[tool.coverage.run]
+omit = ["tests/*", "scripts/*", "src/generated/*", "app.py"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.coverage.xml]
+output = "cov.xml"
+
+[tool.ruff.lint.pydocstyle]
+ignore-decorators = ["override"]
+
+[tool.pytest.ini_options]
+addopts = ["--strict-markers", "-m", "not slow"]
+markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]

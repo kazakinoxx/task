@@ -33,8 +33,8 @@ class PracticePhase:
         keyboard_monitor = self.context.keyboard_monitor
         clock = self.context.clock
         history = self.context.history
-        # ble = self.context.ble
-        # ble.start_recording()  # Start BLE recording at the beginning of the practice phase
+        ble = self.context.ble
+        ble.start_recording()  # Start BLE recording at the beginning of the practice phase
 
         suffix = 'l' if state.get_preferred_hand() == 'left' else 'r'
         hold_key_str = get_hold_keys(state)[0]
@@ -116,7 +116,8 @@ class PracticePhase:
                 translator=translator,
                 go_text=stimulus_text.tap_prompt_message(translator, state.get_key_settings()),
                 release_warning_text=stimulus_text.key_released_early_first_error_message(translator, state.get_key_settings()),
-                continue_tapping_reminder_text=stimulus_text.continue_tapping_message(translator)
+                continue_tapping_reminder_text=stimulus_text.continue_tapping_message(translator),
+                trigger_fn=self.context.ble_trigger,
             )
             narration.stop()
             return result

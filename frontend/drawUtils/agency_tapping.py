@@ -101,7 +101,7 @@ class _InterruptionOverlay:
             self._question.draw()
 
 
-def run_agency_tapping(win, keyboard_monitor, clock, params: AgencyTappingTaskParams, translator=None) -> dict:
+def run_agency_tapping(win, keyboard_monitor, clock, params: AgencyTappingTaskParams, translator=None, ble=None) -> dict:
     state = AgencyTappingTaskState(params)
     thermometer = ThermometerStim(win) if params.show_thermometer else None
 
@@ -127,6 +127,16 @@ def run_agency_tapping(win, keyboard_monitor, clock, params: AgencyTappingTaskPa
     now = clock.getTime()
     if state.start(now):
         return state.build_trial_record()
+
+    # BLE triggers for the control task's three phases. Phase 1 (tapping up to
+    # the interruption) starts now, at GO; the transitions inside the loop
+    # stop it and bracket the control decision (the Y/N interruption) and the
+    # resumed second tapping phase. If no interruption fires (too few taps),
+    # phase 1 simply runs to the trial end and the single stop below closes it.
+    if ble is not None:
+        ble.send_start()
+    prev_awaiting_response = False
+    prev_in_interruption = False
 
     while not state.trial_ended:
         now = clock.getTime()
@@ -157,6 +167,21 @@ def run_agency_tapping(win, keyboard_monitor, clock, params: AgencyTappingTaskPa
         else:
             state.tick(now)
 
+        # -- BLE control-task phase transitions --
+        if ble is not None:
+            if state.awaiting_interruption_response and not prev_awaiting_response:
+                # Interruption fired: end phase-1 tapping, begin control decision.
+                ble.send_stop()
+                ble.send_start()
+            elif prev_awaiting_response and not state.awaiting_interruption_response:
+                # Y/N answered: end the control decision.
+                ble.send_stop()
+            if prev_in_interruption and not state.is_in_interruption:
+                # Resume countdown elapsed: begin the second tapping phase.
+                ble.send_start()
+        prev_awaiting_response = state.awaiting_interruption_response
+        prev_in_interruption = state.is_in_interruption
+
         # Draw + flip exactly once per frame so the loop stays throttled to
         # the monitor refresh (waitBlanking). Previously the flip lived inside
         # the thermometer guard, so during the interruption Q&A the loop spun
@@ -177,4 +202,8 @@ def run_agency_tapping(win, keyboard_monitor, clock, params: AgencyTappingTaskPa
             thermometer.draw()
         win.flip()
 
+    # Close whichever phase was active when the trial ended (phase 1 if there
+    # was no interruption, otherwise the resumed second tapping phase).
+    if ble is not None:
+        ble.send_stop()
     return state.build_trial_record()

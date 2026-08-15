@@ -37,7 +37,8 @@ _REWARD_HEIGHT = 26
 
 
 def run_acceptance(
-    win, keyboard_monitor, params: AcceptanceTrialParams, accept_key: str, reject_key: str, translator=None
+    win, keyboard_monitor, params: AcceptanceTrialParams, accept_key: str, reject_key: str,
+    translator=None, ble=None,
 ) -> dict:
     accept_label = resolve_text(translator, 'ACCEPT_BUTTON_MESSAGE', plain=True, fallback='Accept')
     reject_label = resolve_text(translator, 'REJECT_BUTTON_MESSAGE', plain=True, fallback='Decline')
@@ -77,9 +78,15 @@ def run_acceptance(
         Button(win, accept_label, pos=(BUTTON_X_OFFSET, BUTTON_ROW_Y)),
         Button(win, reject_label, pos=(-BUTTON_X_OFFSET, BUTTON_ROW_Y)),
     ]
+    # BLE decision trigger: start when the offer is put on screen, stop the
+    # moment a decision (accept/decline) is registered.
+    if ble is not None:
+        ble.send_start()
     response_index = run_button_screen(
         win, keyboard_monitor, buttons=buttons,
         key_map={accept_key.lower(): 0, reject_key.lower(): 1},
         extra_stims=[grey_bg, thermometer, high_label, low_label, reward_stim],
     )
+    if ble is not None:
+        ble.send_stop()
     return build_acceptance_trial_record(params, response_index)

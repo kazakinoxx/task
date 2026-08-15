@@ -1,0 +1,34 @@
+{
+    "pylint.args": [
+        "--extension-pkg-whitelist=PySide6,win32api,win32file",
+        "--extension-pkg-allow-list=PySide6,win32api,win32file",
+        "--max-line-length=120",
+        "--disable=W0718",
+        "--disable=W0719",
+        "--disable=C3001",
+        "--disable=W0621"
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "pylint.enabled": false,
+    "editor.formatOnSave": true,
+    "python.analysis.extraPaths": [],
+    "python.analysis.autoSearchPaths": false,
+    "editor.rulers": [
+        88
+    ],
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.indexing": true,
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "PySide6",
+            "depth": 5
+        }
+    ],
+    "cursorpyright.analysis.autoImportCompletions": true,
+    "cursorpyright.analysis.autoSearchPaths": false,
+    "cursorpyright.analysis.extraPaths": [],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}

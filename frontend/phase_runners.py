@@ -71,7 +71,7 @@ from src2.utils.constants import HOLD_KEY_MAX_FAILURES, MAIN_TASK_BREAK_DURATION
 from device_connection.connect import connect_device
 
 from frontend.drawUtils.message import run_message
-from frontend.parts import introduction, practice, calibration, validation, task_core, agency_task_core,final_calibration, connection
+from frontend.parts import introduction, practice, calibration, validation, task_core, agency_task_core,final_calibration, connection, lead_off
 from frontend.parts.context import PhaseContext
 from device_connection import BLEController
 
@@ -173,10 +173,11 @@ def make_phase_runners(
     
 
     return PhaseRunners(
-        # run_device_connect=connection.BLEConnectionPhase(context).run,
-        # run_introduction=introduction.IntroductionPhase(context).run,
-        # run_practice=practice.PracticePhase(context).run,
-        # run_calibration=calibration.CalibrationPhase(context).run,
+        run_device_connect=connection.BLEConnectionPhase(context).run,
+        run_lead_off = lead_off.LeadOffCheckPhase(context).run,
+        run_introduction=introduction.IntroductionPhase(context).run,
+        run_practice=practice.PracticePhase(context).run,
+        run_calibration=calibration.CalibrationPhase(context).run,
         run_validation=validation.ValidationPhase(context).run,
         run_continue_message=run_continue_message,
         run_task_core=task_core.TaskCorePhase(context).run,

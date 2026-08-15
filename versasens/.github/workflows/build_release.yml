@@ -1,0 +1,82 @@
+name: Build and Release
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: true
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: versasens-gui-windows
+          - os: ubuntu-latest
+            artifact: versasens-gui-linux-x86
+          - os: macos-15-intel
+            artifact: versasens-gui-macos-x86
+          - os: macos-latest
+            artifact: versasens-gui-macos-arm
+            
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        version: "0.7.21"
+
+    - name: Install UPX
+      if: runner.os != 'macOS'
+      uses: crazy-max/ghaction-upx@v4
+      with:
+        install-only: true
+
+    - name: Install dependencies
+      run: uv sync --locked --all-extras --dev
+
+    - name: Install libopus and Qt Dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: sudo apt-get install -y libopus0
+
+    - name: Install libopus (macOS)
+      if: runner.os == 'macOS'
+      run: brew install opus
+
+    - name: Build with PyInstaller
+      run: uv run pyinstaller --noconfirm --clean build.spec
+
+    - name: Zip artifact (Windows)
+      if: runner.os == 'Windows'
+      run: Compress-Archive -Path dist/versasens-gui/* -DestinationPath ${{ matrix.artifact }}.zip
+
+    - name: Zip artifact (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: zip -r ${{ matrix.artifact }}.zip dist/versasens-gui/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ matrix.artifact }}
+        path: ${{ matrix.artifact }}.zip
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v8
+      with:
+        merge-multiple: true
+
+    - name: Create release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: Release ${{ github.ref_name }}
+        files: versasens-gui-*.zip
+        generate_release_notes: true

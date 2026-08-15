@@ -49,6 +49,7 @@ def resolve_should_show_agency(general_settings, reload_object: Optional[ReloadO
 @dataclass
 class PhaseRunners:
     run_device_connect: Optional[Callable[[], None]] = None
+    run_lead_off: Optional[Callable[[], None]] = None
     run_introduction: Optional[Callable[[], None]] = None
     run_practice: Optional[Callable[[], None]] = None
     run_calibration: Optional[Callable[[], None]] = None
@@ -69,6 +70,7 @@ def run_experiment(
     if general_settings.useDevice and runners.run_device_connect is not None:
         print("Running device connect phase...")
         runners.run_device_connect()
+        runners.run_lead_off()
 
     if reload_object is None:
         if runners.run_introduction is not None:

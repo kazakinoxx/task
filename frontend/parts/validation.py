@@ -45,6 +45,7 @@ class ValidationPhase:
         history = self.context.history
         translator = self.context.translator
         narration = self.context.narration
+        ble = self.context.ble
 
         suffix = hand_suffix(state)
         header = f'<h2>{stimulus_text.validation_practice_header(translator)}</h2>'
@@ -80,7 +81,8 @@ class ValidationPhase:
             )
             return tapping.run_tapping(
                 win, keyboard_monitor, clock, params,
-                translator=translator
+                translator=translator,
+                trigger_fn=self.context.ble_trigger,
             )
 
         def run_release() -> dict:

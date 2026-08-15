@@ -22,6 +22,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 
 from frontend.narration import Narration
@@ -49,8 +50,31 @@ logging.basicConfig(
     ]
 )
 
-DATA_DIR = Path(__file__).parent.parent / 'src2' / 'data'
-SETTINGS_PATH = Path(__file__).parent.parent / 'src2' / 'settings.json'
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+# All experiment output lives under a single top-level `output/` folder:
+#   output/task_data/  -- per-participant session/checkpoint JSON (written here)
+#   output/eeg/        -- EEG recordings from the versasens worker (config.ini)
+#   output/logs/       -- versasens worker logs (versasens/src/utils/logger.py)
+# The versasens paths are wired on that side; DATA_DIR wires the task data.
+OUTPUT_DIR = REPO_ROOT / 'output'
+DATA_DIR = OUTPUT_DIR / 'task_data'
+SETTINGS_PATH = REPO_ROOT / 'src2' / 'settings.json'
+
+# The BLE worker (`src.connect`) is the versasens stack, which targets Python
+# 3.13, while the experiment runs on 3.10 -- so it is launched under a separate
+# interpreter. `project_root` is the versasens folder, resolved relative to this
+# repo so it isn't tied to one machine's layout. The 3.13 interpreter location
+# IS machine-specific, so it's read from the PYTHON313_HOME env var (set it to
+# your Python 3.13 install dir); the fallback keeps the previous default working.
+VERSASENS_ROOT = REPO_ROOT / 'versasens'
+PYTHON313_HOME = Path(
+    os.environ.get('PYTHON313_HOME', r'C:/Users/ikaze/AppData/Local/Programs/Python/Python313')
+)
+# The versasens audio codec needs libopus; it ships alongside the 3.13 install.
+OPUS_LIBRARY_PATH = os.environ.get('OPUS_LIBRARY_PATH', str(PYTHON313_HOME))
+# Serial port the marker/trigger board enumerates as (override via BLE_MARKER_PORT).
+MARKER_PORT = os.environ.get('BLE_MARKER_PORT', 'COM3')
 
 
 def main() -> None:
@@ -96,16 +120,17 @@ def main() -> None:
     clock = build_clock()
     keyboard_monitor = build_keyboard_monitor(win, clock)
 
-    # ble = BLEController.BLEController(
-    #     python313_path=r"C:/Users/ikaze/AppData/Local/Programs/Python/Python313/python.exe",
-    #     project_root=r"C:/Users/ikaze/Documents/EEGproj/versasens-gui-main",
-    #     opus_lib_path=r"C:/Users/ikaze/AppData/Local/Programs/Python/Python313",
-    # )
-    # ble.start()  #runs throughout the whole experiment, so we start it here and pass it to the phase runners   
+    ble = BLEController.BLEController(
+        python313_path=str(PYTHON313_HOME / 'python.exe'),
+        project_root=str(VERSASENS_ROOT),
+        opus_lib_path=OPUS_LIBRARY_PATH,
+    )
+    ble.start()  #runs throughout the whole experiment, so we start it here and pass it to the phase runners
+    ble.open_marker_port(MARKER_PORT)  # Open the marker port for sending triggers
 
     try:
         runners = make_phase_runners(
-            win, keyboard_monitor, clock, state, history, trigger_device, translator, args.participant, narration#, ble
+            win, keyboard_monitor, clock, state, history, trigger_device, translator, args.participant, narration, ble
         )
         try:
             run_experiment(state, reload_object, runners)

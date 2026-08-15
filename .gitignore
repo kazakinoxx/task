@@ -2,3 +2,21 @@
 /.claude
 /.pytest_cache
 /src2/data
+
+# Python bytecode cache (was committed before; never should be)
+__pycache__/
+*.py[cod]
+
+# Experiment output: task data (JSON), EEG recordings, and versasens worker
+# logs all land under output/. Keep the folder skeleton in git (.gitkeep) so a
+# fresh clone has the layout, but ignore the generated contents.
+/output/*
+!/output/task_data/
+!/output/eeg/
+!/output/logs/
+/output/task_data/*
+!/output/task_data/.gitkeep
+/output/eeg/*
+!/output/eeg/.gitkeep
+/output/logs/*
+!/output/logs/.gitkeep

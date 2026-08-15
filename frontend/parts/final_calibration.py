@@ -33,6 +33,7 @@ class FinalCalibrationPhase:
         history = self.context.history
         translator = self.context.translator
         narration = self.context.narration
+        ble = self.context.ble
 
         suffix = hand_suffix(state)
         header = f'<h2>{stimulus_text.wrap_up_header(translator)}</h2>'
@@ -66,7 +67,8 @@ class FinalCalibrationPhase:
             )
             return tapping.run_tapping(
                 win, keyboard_monitor, clock, params,
-                translator=translator
+                translator=translator,
+                trigger_fn=self.context.ble_trigger,
             )
 
         def run_release() -> dict:
@@ -101,5 +103,5 @@ class FinalCalibrationPhase:
         run_calibration_loop(CalibrationPartType.FINAL_CALIBRATION_PART_2.value, state, history, runners)
 
         
-        # ble.stop_recording()  # Stop BLE recording at the end of the calibration phase
-        # ble.disconnect()  # Disconnect BLE device at the end of the calibration phase
+        ble.stop_recording()  # Stop BLE recording at the end of the calibration phase
+        ble.disconnect()  # Disconnect BLE device at the end of the calibration phase

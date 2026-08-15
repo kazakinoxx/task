@@ -77,7 +77,7 @@ class AgencyTaskCorePhase:
                 key_to_press=get_tap_key(state)
             )
             return agency_tapping.run_agency_tapping(
-                win, keyboard_monitor, clock, params, translator
+                win, keyboard_monitor, clock, params, translator, ble=self.context.ble
             )
 
         practice_runners = AgencyPracticeRunners(
@@ -104,7 +104,7 @@ class AgencyTaskCorePhase:
                 delay_original=selected_delay,
             )
             return agency_tapping.run_agency_tapping(
-                win, keyboard_monitor, clock, params, translator
+                win, keyboard_monitor, clock, params, translator, ble=self.context.ble
             )
 
         core_runners = AgencyCoreRunners(

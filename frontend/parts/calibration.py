@@ -66,7 +66,8 @@ class CalibrationPhase:
             )
             return tapping.run_tapping(  # <-- prefix with 'tapping.'
                 win, keyboard_monitor, clock, params,
-                translator=translator
+                translator=translator,
+                trigger_fn=self.context.ble_trigger,
             )
 
         def run_release() -> dict:

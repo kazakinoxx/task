@@ -144,16 +144,24 @@ def run_tapping(
     if state.start(now):
         return state.build_trial_record()
 
-    if trigger_fn:
-        trigger_fn(False)
-
+    # The trigger start ("GO") fires only once the trial is actually running,
+    # and the matching stop only if a start was sent -- so a trial that aborts
+    # before GO (key tapped early, above) or a random-skip auto-success (below,
+    # `start_running` returns True) emits no trigger at all.
+    started = False
     deadline: Optional[float] = None
     if not params.show_freeze_frame:
         if state.start_running(now):
-            if trigger_fn:
-                trigger_fn(True)
-            return state.build_trial_record()
+            return state.build_trial_record()  # random-skip: never reaches GO
         deadline = now + params.trial_duration / 1000.0
+        if trigger_fn:
+            trigger_fn(False)
+            started = True
+    elif trigger_fn:
+        # Freeze-frame trials reach GO on the first tap (handled in the loop);
+        # kept for completeness -- no active trial sets show_freeze_frame.
+        trigger_fn(False)
+        started = True
 
     # ------------------------------------------------------------
     # 3. MAIN LOOP (optimised for FPS)
@@ -228,7 +236,7 @@ def run_tapping(
     # ------------------------------------------------------------
     # 4. CLEANUP
     # ------------------------------------------------------------
-    if trigger_fn:
+    if trigger_fn and started:
         trigger_fn(True)
 
     return state.build_trial_record()

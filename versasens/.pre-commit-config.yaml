@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: Ruff check
+        entry: uv run ruff check --ignore FIX002 src
+        language: system
+        types: [python]
+        pass_filenames: false

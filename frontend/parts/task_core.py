@@ -43,6 +43,7 @@ class TaskCorePhase:
         history = self.context.history
         translator = self.context.translator
         narration = self.context.narration
+        ble = self.context.ble
 
         trial_block, start_index = resolve_trial_block_sequence(state, remaining_trial_blocks)
         suffix = hand_suffix(state)
@@ -90,7 +91,8 @@ class TaskCorePhase:
             )
             return tapping.run_tapping(
                 win, keyboard_monitor, clock, params,
-                translator=translator
+                translator=translator,
+                trigger_fn=self.context.ble_trigger,
             )
 
         def run_release() -> dict:
@@ -134,7 +136,8 @@ class TaskCorePhase:
                 win, keyboard_monitor, params,
                 accept_key='right',
                 reject_key='left',
-                translator=translator
+                translator=translator,
+                ble=self.context.ble,
             )
 
         task_runners = TaskTrialRunners(

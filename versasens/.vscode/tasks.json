@@ -1,0 +1,117 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "title",
+            "type": "promptString",
+            "description": "Enter the title"
+        }
+    ],
+    "tasks": [
+        {
+            "label": "Generate UI",
+            "type": "shell",
+            "command": "uv run scripts/generate_ui.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate Sensors Info",
+            "type": "shell",
+            "command": "uv run -m scripts.generate_sensors_info",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run app",
+            "type": "shell",
+            "command": "uv run app.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "Open in Qt Creator",
+            "type": "shell",
+            "command": "uv run pyside6-designer ${file}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Open Qt Creator",
+            "type": "shell",
+            "command": "uv run pyside6-designer",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build exec",
+            "type": "shell",
+            "command": "uv run pyinstaller --noconfirm build.spec -- --debug",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build exec (prod)",
+            "type": "shell",
+            "command": "uv run pyinstaller --noconfirm --clean build.spec",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Create documentation header",
+            "type": "shell",
+            "command": "uv run scripts/make_header.py ${input:title}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Ruff: check",
+            "type": "shell",
+            "command": "uv run ruff check src",
+            "problemMatcher": []
+        },
+        {
+            "label": "Ruff: check (no TODO)",
+            "type": "shell",
+            "command": "uv run ruff check --ignore FIX002 src",
+            "problemMatcher": []
+        },
+        {
+            "label": "Ruff: fix",
+            "type": "shell",
+            "command": "uv run ruff check src --fix",
+            "problemMatcher": []
+        },
+        {
+            "label": "Ruff: format",
+            "type": "shell",
+            "command": "uv run ruff format src",
+            "problemMatcher": []
+        },
+        {
+            "label": "Fix and format",
+            "dependsOn": [
+                "Ruff: fix",
+                "Ruff: format"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "Run tests",
+            "type": "shell",
+            "command": "uv run pytest tests --numprocesses=auto -m 'not slow'",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run checks",
+            "dependsOn": [
+                "Ruff: check (no TODO)",
+                "Run tests",
+                "Build exec"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

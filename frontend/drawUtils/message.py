@@ -188,6 +188,7 @@ def run_choice(
     text_pos=None, image_pos=MESSAGE_IMAGE_POS, image_size=MESSAGE_IMAGE_SIZE, wrap_width: Optional[float] = None,
     header: Optional[str] = None, header_pos=(0, 0.7), header_align: str = 'center',
     header_style: Optional[TextStyle] = None, header_wrap_width: Optional[float] = None,
+    extra_stims: Optional[List] = None,
 ) -> dict:
     """Draws `text` (and an optional image, and an optional
     separately-positioned `header`) plus one clickable button per choice,
@@ -203,7 +204,10 @@ def run_choice(
     run_message_trial. `align`/`header_align`: 'left' (paragraphs) or
     'center' (default, short single-line messages). `text_pos`/
     `header_pos`/`image_pos`/`image_size` (norm units) override the
-    default layout, same as run_message_trial."""
+    default layout, same as run_message_trial. `extra_stims` is a list of
+    pre-built PsychoPy stimuli (e.g. an ImageStim + status Circles) drawn
+    on top of the message/image/header, in order, every frame -- used by
+    the lead-off check to overlay the electrode diagram."""
     resolved_style = style or CONFIG.text
     resolved_text_pos = text_pos if text_pos is not None else (
         MESSAGE_TEXT_POS_WITH_IMAGE if image_path is not None else MESSAGE_TEXT_POS_CENTERED
@@ -213,19 +217,21 @@ def run_choice(
         win, text, height=resolved_style.height, color=resolved_style.color, font=resolved_style.font,
         pos=resolved_text_pos, wrap_width=resolved_wrap_width, align=align,
     )
-    extra_stims = [text_stim]
+    stims = [text_stim]
     header_stim = _build_header_stim(win, header, header_pos, header_align, header_style, header_wrap_width)
     if header_stim is not None:
-        extra_stims.append(header_stim)
+        stims.append(header_stim)
     image_stim = _build_image_stim(win, image_path, pos=image_pos, size=image_size)
     if image_stim is not None:
-        extra_stims.append(image_stim)
+        stims.append(image_stim)
+    if extra_stims:
+        stims.extend(extra_stims)
 
     # buttons[i] must return the same index i that key_map maps its key to.
     labels = button_labels or [str(i) for i in range(len(key_map))]
     buttons = two_button_row(win, labels) if len(labels) == 2 else [single_button(win, labels[0])]
 
-    response = run_button_screen(win, keyboard_monitor, buttons=buttons, key_map=key_map, extra_stims=extra_stims)
+    response = run_button_screen(win, keyboard_monitor, buttons=buttons, key_map=key_map, extra_stims=stims)
     return {'response': response}
 
 
