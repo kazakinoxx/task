@@ -83,8 +83,13 @@ class BLEController:
     def connect(self, timeout: float = 15.0) -> Dict[str, Any]:
         return self._send_command("connect", timeout=timeout)
 
-    def disconnect(self, timeout: float = 10.0) -> Dict[str, Any]:
-        return self._send_command("disconnect", timeout=timeout)
+    def disconnect(self, timeout: float = 60.0) -> Dict[str, Any]:
+        # Disconnect triggers the raw->CSV import on the worker, which runs
+        # synchronously before responding, so allow a generous timeout for the
+        # parse of large recordings.
+        resp = self._send_command("disconnect", timeout=timeout)
+        self._recording = False
+        return resp
 
     def start_recording(self, timeout: float = 5.0) -> Dict[str, Any]:
         print("Starting BLE recording...")
@@ -108,16 +113,18 @@ class BLEController:
         """Terminate the BLE worker and close the marker serial port.
 
         If a recording is still in progress -- i.e. the experiment ended before
-        final_calibration's stop_recording() ran, as happens on a crash or when
-        the window is closed early -- stop it first so the EEG data is flushed to
-        disk by the worker instead of being lost when the process is terminated.
-        This is best-effort: cleanup must never raise.
+        final_calibration ran its stop/disconnect, as happens on a crash or when
+        the window is closed early -- disconnect first so the worker flushes the
+        recording to disk AND runs the raw->CSV import, instead of losing it all
+        when the process is terminated. (stop_record alone only flips a flag; the
+        save + CSV export happen on disconnect.) Best-effort: cleanup must never
+        raise.
         """
         if self._started and self._recording and self.proc and self.proc.poll() is None:
             try:
-                self.stop_recording()   # sends stop_record -> worker saves the file
+                self.disconnect()   # stop_stream saves the binary + imports -> CSV
             except Exception:
-                sys.stderr.write("[BLEController] Failed to stop/save recording on shutdown\n")
+                sys.stderr.write("[BLEController] Failed to save recording on shutdown\n")
                 sys.stderr.flush()
         if self.proc and self.proc.poll() is None:
             self.proc.terminate()

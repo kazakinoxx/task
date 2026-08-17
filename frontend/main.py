@@ -127,6 +127,10 @@ def main() -> None:
     )
     ble.start()  #runs throughout the whole experiment, so we start it here and pass it to the phase runners
     ble.open_marker_port(MARKER_PORT)  # Open the marker port for sending triggers
+    # Tag the recording with the participant id. This also enables the raw->CSV
+    # export on disconnect (the worker skips the import when no subject is set),
+    # so EEG is written both as raw binary and per-sensor CSVs under output/eeg/.
+    ble.set_subject(args.participant)
 
     try:
         runners = make_phase_runners(

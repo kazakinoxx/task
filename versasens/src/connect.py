@@ -38,7 +38,12 @@ if sys.platform == 'win32':
 # ------------------------------------------------------------------
 # Configuration
 # ------------------------------------------------------------------
-RECORDING_FILE_PATH = Path("C:/Users/ikaze/Desktop/eeg/recording.csv")
+# Intermediate raw binary for the current recording. The per-recording CSV/WAV
+# output is produced from this by the import step (parse_and_save_files) into the
+# database folder (output/eeg/<subject>/<timestamp>/...). This worker runs with
+# its CWD set to the versasens/ root, so ../output/eeg is the shared output/eeg
+# folder -- no longer a hardcoded per-machine Desktop path.
+RECORDING_FILE_PATH = Path("../output/eeg/intermediate_recording.bin")
 RECORDING_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 # ------------------------------------------------------------------
@@ -267,11 +272,17 @@ async def handle_command(line: str):
         elif action == "disconnect":
             await stop_stream()
             response["message"] = "Disconnected"
-            if _subject_id is not None and RECORDING_FILE_PATH.exists():
-                # Run import in background (non‑blocking)
-                asyncio.create_task(_import_recordings(_subject_id, _notes))
-            elif _subject_id is not None:
-                logger.warning("Recording file not found; cannot import")
+            if RECORDING_FILE_PATH.exists():
+                # Convert the raw binary to CSV/WAV via the database import. Done
+                # synchronously (awaited) so the CSVs are fully written before this
+                # "Disconnected" response is sent -- the caller may terminate the
+                # worker right after, and a background task could be killed first.
+                # Fall back to a default subject id so a recording is never lost to
+                # CSV just because set_subject wasn't called.
+                subject = _subject_id if _subject_id else "unknown_subject"
+                await _import_recordings(subject, _notes)
+            else:
+                logger.warning("Recording file not found; nothing to import")
 
         elif action == "status":
             if raw_data is not None:
