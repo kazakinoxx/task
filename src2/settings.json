@@ -5,7 +5,8 @@
     "skipAgencyTask": false,
     "skipEBDMTask": false,
     "useNarration": false,
-    "taskOrder": "EBDMFirst"
+    "taskOrder": "EBDMFirst",
+    "fixationDurationSeconds": 10
   },
   "languageSettings": {
     "language": "en"

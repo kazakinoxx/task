@@ -30,6 +30,9 @@ class GeneralSettingsType:
     skipEBDMTask: bool = False
     useNarration: bool = True
     taskOrder: TaskOrder = 'EBDMFirst'
+    # Duration (seconds) of the resting-state fixation cross shown after the
+    # introduction. Default 300 = 5 minutes.
+    fixationDurationSeconds: float = 300
 
 
 @dataclass

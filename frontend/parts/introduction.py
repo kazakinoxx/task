@@ -65,7 +65,10 @@ class IntroductionPhase:
         )
         run_introduction(state, history, runners)
 
-        # -- fixation cross: a centered '+' held for a few seconds so the
-        # participant settles/fixates before the tasks begin --
-        run_fixation(win, clock, text=stimulus_text.fixation_message(translator))
+        # -- fixation cross: a centered '+' held as a resting-state baseline so
+        # the participant settles/fixates before the tasks begin. Duration is
+        # configurable via generalSettings.fixationDurationSeconds (default 300 =
+        # 5 min). NOTE: blocking wait with no early-abort (see run_fixation).
+        fixation_duration = state.get_general_settings().fixationDurationSeconds
+        run_fixation(win, clock, duration=fixation_duration, text=stimulus_text.fixation_message(translator))
         history.add({'task': 'fixation', 'trial_type': 'fixation'})

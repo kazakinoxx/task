@@ -176,6 +176,10 @@ def make_phase_runners(
         run_device_connect=connection.BLEConnectionPhase(context).run,
         run_lead_off = lead_off.LeadOffCheckPhase(context).run,
         run_introduction=introduction.IntroductionPhase(context).run,
+        # NOTE: the EEG recording is started inside the practice phase
+        # (practice.PracticePhase calls ble.start_recording()). If this phase is
+        # skipped or not run (e.g. a resumed session, or reordering the flow),
+        # the recording never starts and no EEG will be captured for the run.
         run_practice=practice.PracticePhase(context).run,
         run_calibration=calibration.CalibrationPhase(context).run,
         run_validation=validation.ValidationPhase(context).run,

@@ -126,7 +126,13 @@ def main() -> None:
         opus_lib_path=OPUS_LIBRARY_PATH,
     )
     ble.start()  #runs throughout the whole experiment, so we start it here and pass it to the phase runners
-    ble.open_marker_port(MARKER_PORT)  # Open the marker port for sending triggers
+    # Open the marker port for sending triggers. Non-fatal: if the port isn't
+    # present (no device / wrong COM port), warn and continue -- the experiment
+    # can still run (markers become no-ops, see BLEController.send_start/stop).
+    try:
+        ble.open_marker_port(MARKER_PORT)
+    except RuntimeError as e:
+        logging.warning("Marker port unavailable, continuing without triggers: %s", e)
     # Tag the recording with the participant id. This also enables the raw->CSV
     # export on disconnect (the worker skips the import when no subject is set),
     # so EEG is written both as raw binary and per-sensor CSVs under output/eeg/.

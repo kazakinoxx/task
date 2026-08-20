@@ -24,16 +24,22 @@ class BLEConnectionPhase:
             # 1. Show initial connect screen (with "Connect" button)
             intro_text = (
                 "Please connect the VersaSense BLE device.\n\n"
-                "Make sure the device is powered on and in range."
+                "Make sure the device is powered on and in range.\n"
+                "Or press 'Skip' to run without a device connected."
             )
             choice = message.run_choice(
                 win, kb, intro_text,
-                {"connect": 0},
-                button_labels=["Connect"],
+                {"connect": 0, "skip": 1},
+                button_labels=["Connect", "Skip"],
                 align='center',
             )
             if choice is None:
                 return  # window closed, abort
+            if choice['response'] == 1:
+                # Skip up front: proceed with no device connected, without going
+                # through a connection attempt / troubleshooting.
+                logger.info("BLE connection skipped by operator (running with no device).")
+                return
 
             # 2. Show scanning message (no button) – immediate flip
             message.run_text_only(

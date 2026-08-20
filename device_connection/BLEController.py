@@ -192,6 +192,10 @@ class BLEController:
             raise RuntimeError(f"Marker send failed: {e}")
 
     def send_start(self) -> None:
+        # No-op if the marker port never opened (e.g. no device / missing COM
+        # port) so trigger calls throughout the experiment don't crash.
+        if self.marker_ser is None or not self.marker_ser.is_open:
+            return
         # condition must be 1 (for start) or 2 (for stop) – but you want only 1? Then it's the same.
         print("starting marker")
         self.marker_ser.write(bytes([0x01]))
@@ -201,6 +205,9 @@ class BLEController:
         self.marker_ser.flush()
 
     def send_stop(self) -> None:
+        # No-op if the marker port never opened (see send_start).
+        if self.marker_ser is None or not self.marker_ser.is_open:
+            return
         # condition must be 1 (for start) or 2 (for stop) – but you want only 1? Then it's the same.
         print("stopping marker")
         self.marker_ser.write(bytes([0x01]))
